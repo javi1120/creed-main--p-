@@ -1,0 +1,112 @@
+@font-face {
+    font-family: "Robotolight";
+    src: url('../../../assets/tipografia/RobotoCondensed-Regular.ttf');
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url('../../../assets/tipografia/RobotoCondensed-SemiBold.ttf');
+}
+
+
+
+.contenedor{
+    width: 250px;
+    position: absolute;
+    top: 0;
+    z-index: 900;
+}
+
+h1{
+    font-family: 'Roboto';
+    color: #BE1622;
+    text-align: center;
+    padding-top: 15px;
+    font-size: 38px;
+}
+
+.contenthr{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.linea{
+    height: 1px;
+    width: 95%;
+    background-color: #BE1622;
+    margin: 5px;
+}
+
+.menu{
+    width: 100%;
+    background-image: linear-gradient(to left, #e0e0e0, #ffffff); /* Degradado de rojo a verde */
+    box-shadow: 2px 2px 5px rgba(156, 156, 156, 0.5);
+    opacity: 0.9;
+    
+}
+
+.menu ul li {
+    list-style: none; 
+}
+
+.menu ul {
+    padding: 5px;
+    margin: 0;
+}
+
+.menu ul li {
+    padding: 20px 30px;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+.menu ul li > a {
+    text-decoration: none;
+    margin-left: 20px;
+    font-family: 'Times New Roman';
+    color: #777777;
+    font-size: 16px;
+}
+
+img {
+    height: 1000px;
+}
+
+ul li > img {
+    height: 17px;
+    width: 17px;
+    background-size: cover; /* Para que la imagen cubra todo el contenedor */
+    background-position: center;
+    box-shadow: 3px 3px 4px rgba(20, 20, 20, 0.5);
+}
+
+/* boton flofante */
+.contenedorflotante{
+    display: flex;
+    flex-direction: row;      
+}
+
+.botonflotante{
+    width: 35px;
+    height: 35px;    
+    margin-top: 18px;
+    margin-left: 5px;
+
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.contenedorflotante h1{
+    margin-left: 30px;
+}
+
+/* responsive desing */
+@media screen and (max-width: 768px) {
+    .contenedor{
+        display: none;
+    }
+   
+}
+
+

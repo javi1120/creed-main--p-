@@ -1,0 +1,71 @@
+
+
+<div class="cotenedorcodigos"> 
+    <h3>Codigo Barras</h3>
+    <div class="contendorcodigobarras">
+        <div id="print-section">
+            <div *ngFor="let barcode of arreglojsbar">
+                <svg #barcode></svg>
+            </div>
+            
+        </div>
+        <div class="botonesbarras">
+            <button class="btn btn-danger"  (click)="generar()">Generar Codigos</button>        
+            <button class="btn btn-primary"  (click)="printBarcode()">Imprimir Codigos</button> 
+        </div>
+        
+    </div>
+
+   
+    
+    <div class="tabla" >
+        <input type="text" class="form-control mb-2" placeholder="Buscar Articulos, Subcategorias" [(ngModel)]="buscararticulo" (change)="generar_cod_barras_multiple()" #inputElement>
+
+        <select class="form-select mb-2" [(ngModel)]="id_categoria"  (change)="generar_cod_barras_multiple()">
+            <option *ngFor="let cate of categorias" [value]="cate.id">{{cate.nombre}}</option>
+        </select>
+
+        <table class="table table-bordered table-striped">
+            <thead >
+                <tr >
+                    <th class="tablacabecera">Nombre Articulo</th>
+                    <th class="tablacabecera">Subcategoria</th>
+                    <th class="tablacabecera">Cantidad</th>
+                    <th class="tablacabecera">Referencia</th>
+                    
+                    <th class="tablacabecera">Gestionar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let elemento of listaarticulos | slice:(currentPage - 1) * itemsPerPage : currentPage * itemsPerPage">
+                    <td>{{elemento.nombre}}</td>
+                    <td>{{elemento.subcategoria}}</td>
+                    <td>{{elemento.cantidad}}</td>
+                    <td>{{elemento.referencia}}</td>
+                                            
+                    <td class="modelim"><img src="../../../assets/editar.png" (click)="editararticulo(elemento.id,elemento.referencia)"> 
+                        <img src="../../../assets/codigo_barras.png"  (click)="generar_cod_barras(elemento.referencia)"></td>      
+                </tr>
+            </tbody>
+        </table>
+        <pagination [totalItems]="listaarticulos.length" [(ngModel)]="currentPage" [itemsPerPage]="itemsPerPage"
+            (pageChanged)="pageChanged($event)" class="justify-content-center"></pagination>
+    </div>    
+
+</div>
+
+
+
+<div class="modalgestion" [style.display]="modalgestionVisible ? 'block' : 'none'">
+    <div class="modalgestion-content">
+        <span class="closegestion" (click)="closeModalgestion()">&times;</span>
+
+        <!-- editar categoria -->
+        <div class="editcate">
+            <h3>Gestion Categoria</h3>
+            <input class="form-control" type="text" [value]="referenciagestion" [(ngModel)]="referenciagestion" placeholder="Nombre Referencia">
+            <button class="btn btn-primary" (click)="guardarreferencia()">Actualizar</button>
+        </div>
+    </div>
+<div>

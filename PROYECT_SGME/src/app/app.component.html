@@ -1,0 +1,40 @@
+
+<!-- <div class="contenedor" *ngIf="iniciosesion == true" >
+    <div class="menu">
+        <app-menu-flotante></app-menu-flotante>
+    </div>
+    <div class="conponentes" [style.width.px]="windowWidth-270">
+        <router-outlet></router-outlet>
+    </div>
+</div>
+
+<div class="contenedor2"  *ngIf="iniciosesion == false">
+    <router-outlet></router-outlet>
+</div> -->
+
+
+
+ <!--    <div class="menu">
+        <app-menu-flotante></app-menu-flotante>
+    </div>
+    <div class="conponentes" [style.width.px]="windowWidth-270">
+        <router-outlet></router-outlet>
+    </div> -->
+
+
+    <ng-container *ngIf="iniciosesion == true">
+        <div class="menu">
+            <app-menu-flotante></app-menu-flotante>
+        </div>
+
+        <div class="conponentes"  [style.width.px]="tamano">
+            <router-outlet></router-outlet>
+        </div>
+    </ng-container>
+
+
+    <ng-container *ngIf="iniciosesion == false">
+        <router-outlet></router-outlet>
+    </ng-container>
+
+    

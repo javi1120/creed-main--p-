@@ -1,0 +1,274 @@
+<div class="container">
+    <h2>INVENTARIOS SGME</h2>
+
+    <div class="contgestinvent">
+        <div class="caja-1">
+            <p>Categorias: {{conteo_categorias}}</p>
+        </div>
+        <div class="caja-2">
+            <p>Subcategorias:{{conteo_subcategorias}}</p>
+        </div>
+        <div class="caja-3">
+            <p>Articulos: {{conteo_articulos}}</p>
+        </div>
+        <div class="caja-4" (click)="habilitargestion(1)">
+            <p>Gestion de Categorias</p>
+        </div>
+        <div class="caja-5" (click)="habilitargestion(2)">
+            <p>Gestion de Subcategorias</p>
+        </div>
+        <div class="caja-6" (click)="habilitargestion(3)">
+            <p>Gestion de Articulos</p>
+        </div>
+        <div class="caja-7">
+            <div class="caja-8" (click)="abrimodal(1)"><p>Crear Categorias</p></div>
+            <div class="caja-9" (click)="abrimodal(2)"><p>Crear Subcategorias</p></div>
+            <div class="caja-10" (click)="abrimodal(3)"><p>Crear Articulos</p></div>
+        </div>        
+    </div>
+</div>
+
+<div class="modal-background" [style.display]="modalVisible ? 'block' : 'none'">
+    <div class="modal-content">
+      <span class="close" (click)="closeModal()">&times;</span>
+
+      <!-- crear categoria -->
+      <div class="crear-categoria" *ngIf="ventanascrear === 1"> 
+        <h4>Crear Categoria</h4>  
+        <input type="text" class="form-control" placeholder="Nombre Categoria" [(ngModel)]="nombreCategoria">
+        <button (click)="agregarcategoria()" class="btn btn-primary">Agregar</button>
+      </div>
+      
+      <!-- crear subcategorias -->
+      <div *ngIf="ventanascrear === 2" class="subcategorias">
+            <h4>Crear Subcategorias</h4>
+
+            <div class="row">
+                <div class="col-8">
+                    <input type="text" placeholder="Seleciona categoria" class="form-control" (mouseenter)="onMouseEnter()"  *ngIf="efectocategoria == true">
+                  
+                    <select class="form-select" [(ngModel)]="id_categoria" (mouseout)="onmouseout()" *ngIf="efectocategoria == false">
+                        <option *ngFor="let cate of categorias" [value]="cate.id">{{cate.nombre}}</option>
+                    </select>
+                </div>
+
+                <div class="col-4 botonessub">
+                    <button class="btn btn-danger" (click)="quitarnumsubcategoria()">-</button>
+                    <button class="btn btn-primary" (click)="agregarnumsubcategoria()">+</button>
+                </div>   
+            </div>
+
+
+            <form class="formulario" [formGroup]="myForm" (ngSubmit)="guardarSubcategorias()">
+                <div class="row" *ngFor="let input of inputs; let i = index">
+                    <div class="col-1 mt-4">                    
+                        <h4>{{i+1}}</h4>
+                    </div>
+                    <div class="col-6 mt-3">                    
+                        <!-- <input type="text" placeholder=" Nombre Subcategoria"  class="form-control" formControlName="subcategoria{{i}}"> -->
+                        <input type="text" placeholder=" Nombre Subcategoria"  class="form-control" [id]="input" [formControlName]="input">
+                    </div>    
+                </div> 
+                <div class="boton mt-4">
+                    <button class="btn btn-primary" *ngIf="cont > 0">Guardar</button>
+                </div>
+                
+            </form>
+
+      </div>
+
+      <!-- creacion de articulos -->
+      <div class="elementos" *ngIf="ventanascrear === 3">
+            <h4>Crear Articulos</h4>
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <!-- <input type="text" placeholder="Seleciona categoria" class="form-control"> -->
+                
+                    <select class="form-select" [(ngModel)]="id_categoria_sub"  (change)="listarsubcategorias()">
+                        <option *ngFor="let cate of categorias" [value]="cate.id" >{{cate.nombre}}</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-4">
+                  <!--   <input type="text" placeholder="Seleciona Subcategoria" class="form-control"> -->
+                
+                    <select class="form-select" [(ngModel)]="id_subcate">
+                        <option *ngFor="let subcate of subcategorias" [value]="subcate.id">{{subcate.nombre}}</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-4 botonessub">
+                    <button class="btn btn-danger" (click)="quitararticulo()">-</button>
+                    <button class="btn btn-primary" (click)="agregarArticulo()">+</button>
+                </div>   
+            </div>
+
+
+            <form [formGroup]="formulario" class="formulario mt-4">
+                <div formArrayName="articulos">
+                  <div *ngFor="let categoria of articulos.controls; let i = index" [formGroupName]="i">
+                    <hr>
+                        <div class="row">
+                            <div class="col-sm-1 mt-2">                    
+                                <h4>{{i+1}}</h4>
+                            </div>
+
+                            <div class="form-group col-sm-3">
+                                <input type="text" class="form-control" id="nombre{{i}}" formControlName="nombre" placeholder="Articulo">
+                            </div>
+
+                            <div class="form-group col-sm-3">
+                                <input type="number" class="form-control" id="cantidad{{i}}" formControlName="cantidad" placeholder="Cantidad">
+                            </div>
+
+                            <div class="form-group col-sm-3">
+                                <input type="text" class="form-control" id="referencia{{i}}" formControlName="referencia" placeholder="Referencia">
+                            </div>
+
+                        </div>   
+
+                        <div class="row">
+                            <div class="form-group col-sm-4">
+                                <select class="form-select" formControlName="consumible">
+                                    <option value="" selected>Material consumible</option>
+                                    <option value="true">SI</option>
+                                    <option value="false">NO</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-sm-4">
+                                <select class="form-select" formControlName="id_perfil">
+                                    <option value="" selected>Permitir á</option>
+                                    <option value="admin/auxiliar/docente">Docente</option>                                
+                                    <option value="admin/auxiliar/docente/estudiante">Estudiante y docente</option>
+                                </select>
+                            </div>
+                        </div>
+                  </div>
+                </div>
+                <div class="boton mt-4"   *ngIf="conta > 0">
+                    <button type="button" class="btn btn-primary mt-3" (click)="guardarArticulos()">Guardar</button> 
+                </div> 
+              </form>
+
+      </div>
+
+    </div>
+</div>
+
+<!-- gestion categorias subcategorias y articulos -->
+<div class="gestiocategorias" >
+
+    
+        <!--gestion categorias -->
+        <div class="tabla" *ngIf="habilitargestioncasubcate == 1">
+            <input type="text" class="form-control mb-2" placeholder="Buscar Categoria" [(ngModel)]="buscarcategoria" (change)="listarcategorias()">
+            <table class="table table-bordered table-striped">
+                <thead >
+                    <tr >
+                        <th class="tablacabecera">Nombre Categoria</th>
+                        <th class="tablacabecera">Estado</th>
+                        <th class="tablacabecera">Gestionar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        *ngFor="let elemento of categorias | slice:(currentPage - 1) * itemsPerPage : currentPage * itemsPerPage">
+                        <td>{{elemento.nombre}}</td>
+                        <td><input type="checkbox" class="form-check-input" [checked]="elemento.estado" (change)="Actualizarestadocategoria(elemento.estado,elemento.id)"></td>  
+                        <td class="modelim"><img src="../../../assets/eliminar.png" (click)="eliminarcategoria(elemento.id)"><img src="../../../assets/editar.png" (click)="editarcategoria(elemento.id,elemento.nombre)"></td>      
+                    </tr>
+                </tbody>
+            </table>
+            <pagination [totalItems]="categorias.length" [(ngModel)]="currentPage" [itemsPerPage]="itemsPerPage"
+                (pageChanged)="pageChanged($event)" class="justify-content-center"></pagination>
+        </div>    
+  
+        <!--gestion subcategorias -->
+        <div class="tabla" *ngIf="habilitargestioncasubcate == 2">
+
+            <table class="table table-bordered table-striped">
+                <thead >
+                    <tr >
+                        <th class="tablacabecera">Nombre SubCategoria</th>
+                        <th class="tablacabecera">Estado</th>
+                        <th class="tablacabecerafiltro"> 
+                            <select class="form-select" [(ngModel)]="id_gestion_cate" (change)="listagestionsubcate()">
+                                <option value="0">ALL</option>
+                            <option *ngFor="let cat of categorias" [value]="cat.id">{{cat.nombre}}</option>
+                            </select></th>
+                        <th class="tablacabecera">Gestionar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        *ngFor="let elemento of gestionsubcategorias | slice:(currentPage - 1) * itemsPerPage : currentPage * itemsPerPage">
+                        <td>{{elemento.nombre}}</td>
+                        <td><input type="checkbox" class="form-check-input" [checked]="elemento.estado" (change)="Actualizarestadosubcategoria(elemento.estado,elemento.id)"></td>  
+                        <td>{{elemento.nombre_cate}}</td>
+                        <td class="modelim"><img src="../../../assets/eliminar.png" (click)="eliminarsubcategoria(elemento.id)"><img src="../../../assets/editar.png" (click)="editarsubcategoria(elemento.id,elemento.nombre)"></td>      
+                    </tr>
+                </tbody>
+            </table>
+            <pagination [totalItems]="categorias.length" [(ngModel)]="currentPage" [itemsPerPage]="itemsPerPage"
+                (pageChanged)="pageChanged($event)" class="justify-content-center"></pagination>
+        </div>    
+    
+        <div class="tabla" *ngIf="habilitargestioncasubcate == 3">
+            <input type="text" class="form-control mb-2" placeholder="Buscar Articulos, Subcategorias" [(ngModel)]="buscararticulo" (change)="listararticulos()">
+            <table class="table table-bordered table-striped">
+                <thead >
+                    <tr >
+                        <th class="tablacabecera">Nombre Articulo</th>
+                        <th class="tablacabecera">Subcategoria</th>
+                        <th class="tablacabecera">Cantidad</th>
+                        <th class="tablacabecera">Referencia</th>
+                        <th class="tablacabecera">Material Consumible</th>
+                        <th class="tablacabecera">Gestionar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        *ngFor="let elemento of listaarticulos | slice:(currentPage - 1) * itemsPerPage : currentPage * itemsPerPage">
+                        <td>{{elemento.nombre}}</td>
+                        <td>{{elemento.subcategoria}}</td>
+                        <td>{{elemento.cantidad}}</td>
+                        <td>{{elemento.referencia}}</td>
+                        <td><input type="checkbox" class="form-check-input" [checked]="elemento.material_consumible" (change)="Actualizarestadoarticulo(elemento.material_consumible,elemento.id)"></td>                          
+                        <td class="modelim"><img src="../../../assets/eliminar.png" (click)="eliminararticulo(elemento.id)"><img src="../../../assets/editar.png" (click)="editararticulo(elemento.id,elemento.nombre,elemento.cantidad)"></td>      
+                    </tr>
+                </tbody>
+            </table>
+            <pagination [totalItems]="categorias.length" [(ngModel)]="currentPage" [itemsPerPage]="itemsPerPage"
+                (pageChanged)="pageChanged($event)" class="justify-content-center"></pagination>
+        </div>    
+
+</div>
+
+<div class="modalgestion" [style.display]="modalgestionVisible ? 'block' : 'none'">
+    <div class="modalgestion-content">
+        <span class="closegestion" (click)="closeModalgestion()">&times;</span>
+
+        <!-- editar categoria -->
+        <div class="editcate" *ngIf="abrirmodalgestion == 1">
+            <h3>Gestion Categoria</h3>
+            <input class="form-control" type="text" [value]="edinombrecate" [(ngModel)]="edinombrecate" placeholder="Nombre Categoria">
+            <button class="btn btn-primary" (click)="guardaredicioncategoria()">Actualizar</button>
+        </div>
+
+        <div class="editcate" *ngIf="abrirmodalgestion == 2">
+            <h3>Gestion SubCategoria</h3>
+            <input class="form-control" type="text" [value]="editnombresubcate" [(ngModel)]="editnombresubcate" placeholder="Nombre Subcategoria">
+            <button class="btn btn-primary" (click)="guardaredicionsubcategoria()">Actualizar</button>
+        </div>
+
+        <div class="editcate2" *ngIf="abrirmodalgestion == 3">
+            <h3>Gestion Articulos</h3>
+            <input class="form-control" type="text" [value]="editnombrearticulo" [(ngModel)]="editnombrearticulo" placeholder="Nombre Articulo">
+            <input class="form-control" type="number" [value]="editcantidadarticulo" [(ngModel)]="editcantidadarticulo" placeholder="Cantidad">
+            <button class="btn btn-primary" (click)="guardaredicionarticulo()">Actualizar</button>
+        </div>
+    </div>
+
+</div>

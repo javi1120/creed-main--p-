@@ -1,0 +1,14 @@
+.contenedor{
+    width: 100%;
+}
+
+.menu{
+    width: 250px;
+    background-color: aqua;
+}
+
+.conponentes{
+    position: absolute;
+    background-color: antiquewhite;
+    right: 0;
+}

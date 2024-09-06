@@ -1,0 +1,144 @@
+<div class="container pt-5">
+
+
+    <h1>Solicitudes</h1>
+
+   <div class="formulario">
+    <form [formGroup]="formUser" >
+        <H4>Info Solicitudes</H4>
+        <hr>
+        <div class="row">
+             
+              <div class="col-sm-4">
+                <label>Descripcion solicitud o Evento</label>
+                <input type="text" class="form-control" formControlName="descripcion">
+              </div>
+
+              <div class="col-sm-4">
+                <label># Participantes</label>
+                <input type="number" class="form-control" formControlName="numparticipantes">
+              </div>  
+
+              <div class="col-sm-4">
+                <label>Sector</label>
+                <select class="form-select" formControlName="sector">
+                  <option *ngFor="let sec of sector" [value]="sec.id" >{{sec.nombre}}</option>
+                </select>
+              </div> 
+             
+              <div class="col-sm-12 mt-3">
+                <textarea placeholder="Observacion" class="form-control" formControlName="observacionsolicitud"></textarea>
+              </div>
+                                         
+        </div>
+
+    </form>  
+
+        <br>
+        <h4>Solicitud Espacios Fisicos o Articulos</h4>
+        <hr>
+        <div class="row">
+            <label>Categorias</label>
+            <div class="col-sm-4">          
+                <select class="form-select" [(ngModel)]="id_categoria_sub"  (change)="listarsubcategorias()" [ngModelOptions]="{standalone: true}">
+                    <option *ngFor="let cate of categorias" [value]="cate.id" >{{cate.nombre}}</option>
+                </select>
+            </div>
+            
+            <div class="col-sm-4">          
+                <select class="form-select" [(ngModel)]="id_subcate" [ngModelOptions]="{standalone: true}" (change)="listararticulossolicitud()"> 
+                    <option *ngFor="let subcate of subcategorias" [value]="subcate.id">{{subcate.nombre}}</option>
+                </select>
+            </div>
+
+            <div class="col-sm-4 botonessubsol">
+              <!-- <button class="btn btn-danger">-</button>    -->
+              <button class="btn btn-primary" (click)="activarboton()" *ngIf="inactivarbotonagregar">+</button>           
+            </div>
+
+        </div>
+
+        <!-- modal agregar articulo solicitud -->
+        <div class="modal-background" [style.display]="modalVisible ? 'block' : 'none'">
+          <div class="modal-content">
+            <span class="close" (click)="closeModal()">&times;</span>
+          
+            <form  [formGroup]="formArt">
+              <div class="row">
+                <h3>Solicitudes SGME</h3>
+              </div>
+
+              <p><i>Recuerdá que si eres estudiante solo podras pedir un articulo por una hora.</i></p>
+
+              <div class="row">
+
+                <div class="col-sm-6">
+                  <label>Articulo ó Espacios</label>
+                          
+                    <select class="form-select"[(ngModel)]="id_articulo" (change)="obtenercantidadarticulos()" formControlName="id_articulo"> 
+                        <option *ngFor="let articulo of listaarticulos" [value]="articulo.id">{{articulo.nombre}}</option>
+                    </select>
+              
+                </div>
+
+                <div class="col-sm-6">
+                  
+                  <label>Cantidad maxima: {{cantidad}}</label>
+                  <input type="number" class="form-control" [max]="cantidad" formControlName="cantidadarticulo">
+                </div>
+
+              </div>
+
+              
+              <div class="row">
+                  <div class="col-sm-12 mt-3">
+                    <textarea placeholder="Observacion" class="form-control" formControlName="observacion"></textarea>
+                  </div>
+              </div>
+            
+
+              <div class="row">
+                <div class="col-sm-12 btnagregarsolicitud">
+                    <button class="btn btn-primary" (click)="agregarArticulosolicitud()">Guardar</button>
+                </div>
+              </div>
+                     
+            </form> 
+          </div>
+       </div>
+
+      <div class="container mt-5" *ngIf="cont > 0">
+       <!--Crear una tabla-->
+       <table class="table table-bordered table-striped">
+        <thead >
+            <tr >
+                <th class="tablacabecera">Articulo</th>
+                <th class="tablacabecera">Cantidad</th>
+                <th class="tablacabecera">Observacion</th>
+                <th class="tablacabecera">Modificar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let elemento of arregloarticulos | slice:(currentPage - 1) * itemsPerPage : currentPage * itemsPerPage">
+                <td>{{elemento.nombre}}</td>
+                <td>{{elemento.cantidad}}</td>
+                <td>{{elemento.observacion}}</td>
+                <td class="modelim"><img src="../../../assets/eliminar.png" (click)="eliminararticulo(elemento.id)"></td>
+            </tr>
+        </tbody>
+        </table>
+        <pagination [totalItems]="10" [(ngModel)]="currentPage" [itemsPerPage]="itemsPerPage"
+          (pageChanged)="pageChanged($event)" class="justify-content-center"></pagination>
+        <!-- cerrar tabla -->
+
+        <div class="row">
+          <div class="col-sm-12 btnagregarsolicitud">
+              <button class="btn btn-primary" (click)="formularioUsuarios()">Guardar</button>
+          </div>
+        </div>
+
+      </div> 
+
+   </div>
+ 
+</div>

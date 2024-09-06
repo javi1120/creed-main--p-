@@ -1,0 +1,112 @@
+.cotenedorcodigos{
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;  
+    width: 100%;  
+}
+
+.cotenedorcodigos h3 {
+    text-align: center;
+}
+
+.contendorcodigobarras{
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;    
+    align-items: center;   
+}
+
+.tabla{    
+    display: flex;
+    flex-direction: column;
+   /*  justify-content: center;
+    align-content: center; */
+    margin-left: 50px;    
+    margin-top: 30px;
+    margin-right: 50px;
+}
+
+.modelim > img{
+    width: 25px;
+    height: 25px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+
+  .contendorcodigobarras #print-section {
+    text-align: center;
+    margin: 20px;
+  }
+  
+  .contendorcodigobarras button {
+    display: block;
+    margin: 20px auto;
+  }
+
+   /* modal gestion */
+   .modalgestion{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    overflow: auto;
+  }
+
+  .modalgestion-content{
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 3px 3px 4px rgba(80, 0, 0, 0.5);
+    width: 30%;
+  }
+
+  .closegestion {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .closegestion:hover,
+  .closegestion:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .editcate{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .editcate h3{
+    text-align: center;
+  }
+
+  .editcate > input {
+    margin-top: 10px;
+    margin-bottom: 30px;
+  }
+
+  #print-section {
+    max-height: 250px; /* Ajusta esta altura según tus necesidades */
+    overflow-y: auto; /* Permite el desplazamiento vertical */
+    border: 1px solid #ccc; /* Opcional: añade un borde para visualizar el área */
+    padding: 10px; /* Opcional: añade un poco de padding */
+}
+
+.botonesbarras{
+  display: flex;
+  flex-direction: row; 
+}
+
+.botonesbarras > button {
+  margin-right: 20px;
+}

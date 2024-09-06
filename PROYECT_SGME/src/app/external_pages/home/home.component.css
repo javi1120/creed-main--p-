@@ -1,0 +1,149 @@
+
+@font-face {
+    font-family: "Robotolight";
+    src: url('../../../assets/tipografia/RobotoCondensed-Medium.ttf');
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url('../../../assets/tipografia/RobotoCondensed-SemiBold.ttf');
+}
+
+
+.contenedor{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.header{
+    background-color: #0D4688;
+    width: 100%;
+}
+
+.header img{
+    background-size: contain;
+    width: 100%;
+}
+
+.contenidosesion{
+    width: 100%;
+    display: flex;
+}
+
+.contenidoleft{
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.contenedorimagen{
+    width: 100%;
+    height: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.contenedorimagen img{
+    height: 70%;
+}
+
+.contenedortexto{
+    width: 100%;
+    height: 30%; 
+    text-align: center; 
+}
+
+
+.contenidoright{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.foother{
+    width: 100%;
+    background-color: #f3f3f3;
+    display: flex;
+    justify-content: space-between;
+    color: #0D4688;
+    padding: 20px 10px 0px 10px; /* 10px arriba, 20px a la derecha, 15px abajo, 5px a la izquierda */
+}
+
+.foother p {
+    font-family: 'Robotolight';
+    align-self: center;
+}
+
+h2 {
+    font-family: 'Robotolight';
+    color: #BE1622;
+    font-size: 2.5rem;
+  }
+ 
+ .mediostxt{
+    font-family: 'Roboto';
+ } 
+
+.tituloformulario{
+    text-align: center;
+    margin-top: 40px;
+}
+
+.tituloformulario p{
+    font-family: 'Roboto';
+    font-size: 30px;
+    color: #0D4688;
+    margin-bottom: 2px;
+}
+
+.tituloformulario p:first-child {
+    /* Tus estilos aquí */
+    color: #BE1622; /* Ejemplo de cambiar el color del texto */
+}
+
+.formulario{
+    text-align: center;
+}
+
+form button {
+    margin-top: 30px;
+    width: 150px;
+    font-family: 'Roboto';
+}
+
+.contenedorformulario{
+    background-color: #f3f3f3;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+@media screen and (max-width: 768px) {
+
+   .contenidoleft{
+    display: none;
+   }
+
+   .contenidoright{
+    width: 90%;
+   }
+
+   .contenedorformulario{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+   }
+    
+   .header{
+    width: 100%;
+   }
+
+   .foother p{
+    font-size: 12px;
+   }
+}

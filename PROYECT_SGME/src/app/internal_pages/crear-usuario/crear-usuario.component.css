@@ -1,0 +1,49 @@
+@font-face {
+    font-family: "Robotolight";
+    src: url('../../../assets/tipografia/RobotoCondensed-Regular.ttf');
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url('../../../assets/tipografia/RobotoCondensed-SemiBold.ttf');
+}
+
+.formulario{
+    background-color: rgb(248, 248, 248);
+    padding-right: 60px;
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin: 40px;
+}
+
+form input,textarea{
+    margin: 20px;
+} 
+
+.boton{
+    text-align: center;
+}
+
+.boton button {
+    width: 150px;
+    background-color:  #BE1622;
+    color: white;
+}
+
+.selector{
+    margin: 20px;
+}
+
+h1{
+    text-align: center;
+    font-family: 'Roboto';
+    color:  #BE1622;
+}
+
+.requerido{
+    color: red;
+    font-size: 12px;
+    margin-top: -15px;
+    margin-left: 30px;
+}

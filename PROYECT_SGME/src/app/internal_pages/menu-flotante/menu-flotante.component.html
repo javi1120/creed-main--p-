@@ -1,0 +1,30 @@
+<!-- floating-menu.component.html -->
+<!-- <div class="floating-menu" *ngIf="showMenu">
+    <ul>
+      <li><a href="#">Opción 1</a></li>
+      <li><a href="#">Opción 2</a></li>
+      <li><a href="#">Opción 3</a></li>
+    </ul>
+  </div> -->
+
+  <div class="contenedorflotante">
+    <img class="botonflotante" (click)="activarmenu(abrimenuflotante)" src="../../../assets/menusanduche.png"/>
+  </div>
+  
+  <div class="contenedor" [style.display]="abrimenuflotante ? 'none' : 'block'">    
+    <h1>SGME</h1>
+    <div class="contenthr">
+        <div class="linea"></div>
+    </div>
+    <div class="menu" [style.height.px]="windowHeight">
+        <ul>
+          <li class="nav-item" *ngFor="let menu of menus">
+            <img src="../../assets/opcionoscura.png">
+            <a [routerLink]="[menu.rutas]" routerLinkActive="active-link">{{menu.nombre}}</a>
+          </li>
+          <li><img src="../../assets/opcionoscura.png" alt=""><a (click)="salir()">Salir</a></li>
+        </ul>
+        
+    </div>
+  </div>
+

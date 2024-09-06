@@ -1,0 +1,192 @@
+h1{
+    text-align: center;
+    font-family: 'Roboto';
+    color:  #BE1622;
+}
+
+.containergestion{
+    margin-top: 60px;
+}
+
+img {
+    width: 28px;
+    height: 28px;
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
+.buscador {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 80px;
+}
+.buscador > input {
+    width: 50%;
+}
+
+.contedatos{
+    margin-top: 50px;
+  
+    display: flex;
+    justify-content: center; 
+}
+.contedatos > h4 {
+    font-family: 'Roboto';
+    color:  #BE1622;
+}
+
+.contedatos h4 > p{
+    display: inline-block;
+    color: black;
+}
+
+.formulario {
+    margin-top: -5px;
+    margin-left: 20px;
+}
+
+.perfil{
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.cuadroadmin {
+    width: 70px;
+    height: 70px;
+    background-color: rgb(231, 86, 86);
+    border-radius: 5px;
+    box-shadow: 3px 3px 4px rgba(80, 0, 0, 0.5);
+    margin-left: 20px;
+    margin-right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.cuadroadmin > p {
+    margin-top: 15px;
+    color: aliceblue;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.cuadroauxiliar {
+    width: 70px;
+    height: 70px;
+    background-color: rgb(51, 113, 248);
+    border-radius: 5px;
+    box-shadow: 3px 3px 4px rgba(4, 0, 59, 0.5);
+    margin-left: 20px;
+    margin-right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cuadroauxiliar > p {
+    margin-top: 15px;
+    color: aliceblue;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.cuadrodocente {
+    width: 70px;
+    height: 70px;
+    background-color: rgb(250, 169, 77);
+    border-radius: 5px;
+    box-shadow: 3px 3px 4px rgba(4, 0, 59, 0.5);
+    margin-left: 20px;
+    margin-right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cuadrodocente > p {
+    margin-top: 15px;
+    color: aliceblue;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.cuadroestudiante {
+    width: 70px;
+    height: 70px;
+    background-color: rgb(48, 134, 247);
+    border-radius: 5px;
+    box-shadow: 3px 3px 4px rgba(4, 0, 59, 0.5);
+    margin-left: 20px;
+    margin-right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cuadroestudiante > p {
+    margin-top: 15px;
+    color: aliceblue;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+
+.perfilactivo {
+    width: 80px;
+    height: 80px;
+}
+
+
+.perfil > h4 {
+    margin-top: 20px;
+    text-align: center;
+    font-family: 'Roboto';
+    color:  #BE1622;
+}
+
+.tabsgestion{
+    width: 80%;
+    margin-top: 50px;
+    margin-left: 80px;
+    margin-right: 80px;
+}
+
+
+
+.tabs {
+    display: flex;
+  }
+  
+  .tab {
+    padding: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+  
+  .tab.active {
+    background-color: #f0f0f0;
+  }
+  
+  .tab-content {
+    margin-top: 10px;
+  }
+  
+  .tab-pane {
+    display: none;
+  }
+  
+  .tab_pane_active {
+    display: block;
+    background-color: #BE1622;
+    color: red;
+  }
+  

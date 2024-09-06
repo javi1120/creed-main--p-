@@ -1,0 +1,46 @@
+<div class="contenedor">
+    <div class="header" [style.height.px]="windowHeight*0.12">
+        <img src="../../../assets/fondoheader.png" [style.height.px]="windowHeight*0.12">
+    </div>
+    <div class="contenidosesion"  [style.height.px]="windowHeight*0.80">
+        <div class="contenidoleft">
+            <div class="contenedorimagen">
+                <img src="../../../assets/Escudos_2.png"> 
+            </div>
+            <div class="contenedortexto">
+                <h2>Sistema de Gestión de</h2>
+                <h2 class="mediostxt">Medios Educativos</h2>
+            </div>
+        </div>
+
+        <div class="contenidoright">
+                
+                <div class=" border ms-5 contenedorformulario">
+                    <div class="tituloformulario">
+                        <p>SGME</p>
+                        <p>Iniciar Sesion</p>
+                    </div>
+                        
+                    <form class="p-5 mt-2 formulario" [formGroup]="formUser" (ngSubmit)="login()">
+                        <div class="mb-3">
+                            <input type="email" class="form-control" formControlName="usuario" aria-describedby="emailHelp" placeholder="Usuario">
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" placeholder="Constraseña" formControlName="constrasena">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Ingresar</button>
+                        <div class="alert alert-danger mt-2" *ngIf="verificarusuario">
+                            <span>
+                            No se encontro al usuario oh la contraseña es erronea
+                            </span>
+                        </div>
+                    </form>
+                </div>
+          </div>
+
+    </div>  
+    <div class="foother"  [style.height.px]="windowHeight*0.08">
+        <p>Oficina de Medios Educativos</p>
+        <p>Información: (602) 7244434 Ext. XXX - medioseducativos&#64;unicesmag.edu.co</p>
+     </div>         
+</div>

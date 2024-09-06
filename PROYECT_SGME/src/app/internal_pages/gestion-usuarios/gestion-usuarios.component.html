@@ -1,0 +1,90 @@
+<div class="container">
+    <div class="containergestion">
+        <h1>Gestion Usuarios</h1>
+
+        <div class="buscador">
+            <img src="../../../assets/buscar.png" alt="">
+           <input type="text" class="form-control" placeholder="Cedula" [(ngModel)]="cedula" 
+           (change)="onChangecedulaUsuario($event)">
+        </div>
+
+    
+        <div class="modgestion" *ngIf="habilitargestion == true">
+
+            <div class="contedatos">
+                <h4>Usuario: <p>{{nombre_usuario}}</p></h4>
+              <!--   <form class="formulario" [formGroup]="formUser" (ngSubmit)="actualizardatosusuario()">
+                    <div class="row">
+                        <div class="col-4 ">
+                            <input type="text" placeholder="Usuario" class="form-control" formControlName="usuario">
+                        </div>
+                        <div class="col-4">
+                            <input type="text" placeholder="Contraseña"  class="form-control" formControlName="contrasena">
+                        </div>
+                        <div class="col-4">
+                            <button class="btn btn-danger">Actualizar</button>
+                        </div>  
+                    </div>   
+                </form> -->
+            </div>
+            
+
+            <div class="perfil">
+                <h4>Perfiles</h4>
+                <div [class]="cuadroadmin">
+                    <p (click)="estadoperfilusuario(1)">Admin</p>
+                </div>
+    
+                <div [class]="cuadroauxiliar">
+                    <p (click)="estadoperfilusuario(2)">Auxiliar</p>
+                </div>
+
+                <div [class]="cuadrodocente">
+                    <p (click)="estadoperfilusuario(3)">Docente</p>
+                </div>
+
+                <div [class]="cuadroestudiante">
+                    <p (click)="estadoperfilusuario(4)">Estu..</p>
+                </div>
+            </div>
+
+            <div class="tabsgestion">
+                <div class="nav nav-tabs">
+                    <div class="nav-link active" (click)="selectTab('tab1')" [class.active]="selectedTab === 'tab1'">Menus</div>
+                    <div class="nav-link active" (click)="selectTab('tab2')" [class.active]="selectedTab === 'tab2'">Permisos</div>
+                    <!-- <div class="nav-link active" (click)="selectTab('tab3')" [class.active]="selectedTab === 'tab3'">Tab 3</div> --> 
+                  </div>
+                  
+                  <div class="tab-content">
+                    <div *ngIf="selectedTab == 'tab1'"  >
+
+                        <table class="table table-bordered table-striped mt-5" >
+                            <thead>
+                                <tr>
+                                    <th>Menu</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    *ngFor="let menu of listamenus | slice:(currentPage - 1) * itemsPerPage : currentPage * itemsPerPage">
+                                    <td>{{menu.nombre}}</td>
+                                    <!-- <td><input class="form-check-input mx-3" type="checkbox" [checked]="elemento.estado_activo" (change)="actualizarsuarioconfirmacion(elemento.id, elemento.estado_activo)"></td> -->
+                                    <td><input class="form-check-input mx-3" type="checkbox" [checked]="menu.estado" (change)="actualizarmenususuarios(menu.id_menu, menu.id_usuario, menu.estado,cedula)"></td>
+                                    <!-- <td><button class="btn btn-danger" (click)="Eliminarusuario(elemento.id)">X</button></td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                        <pagination [totalItems]="listamenus.length" [(ngModel)]="currentPage" [itemsPerPage]="itemsPerPage"
+                            (pageChanged)="pageChanged($event)" class="justify-content-center"></pagination>  
+                            
+                    </div>
+                    <div *ngIf="selectedTab === 'tab2'" >Contenido de la pestaña 2</div>
+                   <!--  <div *ngIf="selectedTab === 'tab3'" >Contenido de la pestaña 3</div>  -->
+                  </div>
+            </div>    
+          
+        </div>
+
+    </div>
+</div>

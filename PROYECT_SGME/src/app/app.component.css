@@ -1,0 +1,23 @@
+
+.contenedor{
+    width: 100%;
+}
+
+.menu{
+    
+}
+
+.conponentes{
+    position: absolute;
+    right: 0;
+}
+
+.contenedor2{
+    width: 100%;
+}
+
+/* @media screen and (max-width: 768px) {
+    .contenedor{
+        display: none;
+    }
+} */

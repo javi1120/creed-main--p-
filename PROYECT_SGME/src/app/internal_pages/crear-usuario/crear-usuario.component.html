@@ -1,0 +1,78 @@
+<div class="container pt-5">
+
+
+        <h1>Crear Usuarios</h1>
+
+       <div class="formulario">
+        <form [formGroup]="formUser" (ngSubmit)="formularioUsuarios()">
+            <H4>Registro Personas</H4>
+            <hr>
+            <div class="row">
+                  <div class="col-sm-4 col-lg-4">
+                    <input type="text" placeholder="Primer Nombre" class="form-control" formControlName="primer_nombre">
+                    <div *ngIf="formUser.get('primer_nombre')?.touched && formUser.get('primer_nombre')?.errors?.['required']" class="requerido">Este campo es requerido</div>
+                    <input type="text" placeholder="Segundo Apellido" class="form-control" formControlName="segundo_apellido">
+                    <div *ngIf="formUser.get('segundo_apellido')?.touched && formUser.get('segundo_apellido')?.errors?.['required']" class="requerido">Este campo es requerido</div>
+                    <input [type]="fechanacimiento" placeholder="Fecha Nacimiento" class="form-control" formControlName="fecha_nacimiento" (mouseenter)="onMouseEnter(1)" (mouseout)="onmouseout(1)">
+                    <div *ngIf="formUser.get('fecha_nacimiento')?.touched && formUser.get('fecha_nacimiento')?.errors?.['required']" class="requerido">Este campo es requerido</div>
+                    <select class="form-select selector" aria-label="Default select example" formControlName="genero">
+                        <option value="5" selected>Genero</option>
+                        <option value="1">Femenino</option>
+                        <option value="2">Masculino</option>
+                        <option value="3">Poblacion LGTBIQ+</option>
+                        <option value="4">Poblacion OSIGD</option>
+                    </select>
+                    
+                     <div *ngIf="formUser.get('genero')?.value == '5'" class="requerido">Seleciona Genero</div> 
+                        
+                  </div>
+                  <div class="col-sm-4 col-lg-4">
+                    <input type="text" placeholder="Segundo Nombre" class="form-control" formControlName="segundo_nombre">
+                    <div *ngIf="formUser.get('segundo_nombre')?.touched && formUser.get('segundo_nombre')?.errors?.['required']" class="requerido">Este campo es requerido</div>
+                    <input type="text" placeholder="Cedula" class="form-control" formControlName="cedula">
+                    <div *ngIf="formUser.get('cedula')?.touched && formUser.get('cedula')?.errors?.['required']" class="requerido">Este campo es requerido</div>
+                    <input type="text" placeholder="Direccion" class="form-control" formControlName="direccion">
+                    <div *ngIf="formUser.get('direccion')?.touched && formUser.get('direccion')?.errors?.['required']" class="requerido">Este campo es requerido</div>
+                    <input type="email" placeholder="Correo" class="form-control" formControlName="correo">
+                    <div *ngIf="formUser.get('correo')?.errors?.['email']" class="requerido">
+                        Por favor, introduce un correo electrónico válido.
+                    </div>
+                  </div>
+                  <div class="col-sm-4 col-lg-4"> 
+                    <input type="text" placeholder="Primer Apellido" class="form-control" formControlName="primer_apellido">
+                    <div *ngIf="formUser.get('primer_apellido')?.touched && formUser.get('primer_apellido')?.errors?.['required']" class="requerido">Este campo es requerido</div>
+                    <input [type]="fechaexpedicion" placeholder="Fecha Expedicion" class="form-control" formControlName="fecha_expedicion" (mouseenter)="onMouseEnter(2)" (mouseout)="onmouseout(2)">
+                    <div *ngIf="formUser.get('fecha_expedicion')?.touched && formUser.get('fecha_expedicion')?.errors?.['required']" class="requerido">Este campo es requerido</div>
+                    <!-- <input class="form-check-input mx-3" type="checkbox" [checked]="true" formControlName="activo"> -->
+                    <input type="text" placeholder="Celular" class="form-control" formControlName="celular">
+                    <div *ngIf="formUser.get('celular')?.touched && formUser.get('celular')?.errors?.['required']" class="requerido">Este campo es requerido</div>
+                   <!--  <div *ngIf="formUser.get('celular')?.errors?.['minLength']" class="requerido">
+                            debe tener varios 10 digitos
+                    </div> -->
+                    <textarea class="form-control" placeholder="Novedad" formControlName="novedad"></textarea>
+                  </div>
+
+                  <H4>Registro Usuarios</H4>
+                  <hr>  
+                  <div class="col-sm-6 col-lg-6">
+                    <input type="text" placeholder="Nombre Usuario" class="form-control" formControlName="nombre_usuario">
+                    <div *ngIf="formUser.get('nombre_usuario')?.touched && formUser.get('nombre_usuario')?.errors?.['required']" class="requerido">Este campo es requerido</div>
+                  </div>
+
+                  <div class="col-sm-6 col-lg-6">
+                    <input type="text" placeholder="Password" class="form-control" formControlName="clave_acceso">
+                    <div *ngIf="formUser.get('clave_acceso')?.touched && formUser.get('clave_acceso')?.errors?.['required']" class="requerido">Este campo es requerido</div>
+                  </div>
+
+                  <div class="col-12 mt-3 boton">
+                    <button class="btn"  [disabled]="formUser.invalid || formUser.get('genero')?.value == '5'">Guardar</button>
+                  </div>  
+            </div>
+        
+           </form>
+       </div>
+
+      
+    
+</div>
+
