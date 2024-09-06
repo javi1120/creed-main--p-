@@ -1,1 +1,12 @@
-<p>reportes works!</p>
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card p-4">
+      <h5 class="card-title text-center">Guardar Información</h5>
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Escribe aquí" [(ngModel)]="inputValue">
+      </div>
+      <button class="btn btn-primary btn-block mt-3" (click)="guardarInformacion()">Guardar</button>
+      <div *ngIf="savedValue" class="alert alert-success mt-3" role="alert">
+        Información guardada: {{ savedValue }}
+      </div>
+    </div>
+  </div>

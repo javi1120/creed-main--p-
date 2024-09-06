@@ -122,7 +122,7 @@ app.post('/sgme/listararticulossolicitud', rutasinventario.listararticulossolici
 app.post('/sgme/listarcategoriassolicitud', rutasinventario.listarcategoriassolicitud); 
 app.post('/sgme/obtenercantidadarticulos', rutasinventario.obtenercantidadarticulos); 
 app.post('/sgme/solicitudes', rutasinventario.solicitudes);
-
+app.post('/sgme/generarpdf', rutasinventario.generarpdf);
 
 
 app.use(session({
