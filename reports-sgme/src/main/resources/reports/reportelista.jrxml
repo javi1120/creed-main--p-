@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportelista" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6a2bd33c-a60f-4db7-9c8b-e46c452dea34">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#8FAFCC">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#CFDBE6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="New Dataset 1" uuid="e697bf1f-ec93-4a12-9fd5-8dde320ce8de">
+		<parameter name="idarticulo" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT
+    so.*,
+    soar.*,
+    ar.*,
+    us.*,
+    soar.estado AS estado_solicitud_articulos,
+soar.id AS id_solicitud_aulasyarticulos
+FROM
+    sgme.solicitudes so
+INNER JOIN
+    sgme.solicitudes_articulos soar
+    ON so.id = soar.id_solicitudes
+INNER JOIN
+    sgme.articulos ar
+    ON ar.id = soar.id_articulos
+INNER JOIN
+    usuarios us
+    ON us.id = so.id_usuario
+where ar.id = $P{idarticulo} ::integer]]>
+		</queryString>
+		<field name="id" class="java.lang.Integer"/>
+		<field name="nombre_evento" class="java.lang.String"/>
+		<field name="fecha_creacion" class="java.sql.Timestamp"/>
+		<field name="num_participantes" class="java.lang.Integer"/>
+		<field name="id_usuario" class="java.lang.Integer"/>
+		<field name="observacion" class="java.lang.String"/>
+		<field name="estado" class="java.lang.Boolean"/>
+		<field name="id_sede" class="java.lang.Integer"/>
+		<field name="id_solicitudes" class="java.lang.Integer"/>
+		<field name="id_articulos" class="java.lang.Integer"/>
+		<field name="nombre" class="java.lang.String"/>
+		<field name="id_subcategoria" class="java.lang.Integer"/>
+		<field name="cantidad" class="java.lang.Integer"/>
+		<field name="referencia" class="java.lang.String"/>
+		<field name="material_consumible" class="java.lang.Boolean"/>
+		<field name="rol" class="java.lang.String"/>
+		<field name="nombre_usuario" class="java.lang.String"/>
+		<field name="clave_acceso" class="java.lang.String"/>
+		<field name="nivel_seguridad" class="java.lang.String"/>
+		<field name="serie_randomica" class="java.lang.String"/>
+		<field name="id_persona" class="java.lang.Long"/>
+		<field name="ultimo_acceso" class="java.sql.Timestamp"/>
+		<field name="id_empresa" class="java.lang.Long"/>
+		<field name="bloqueo_cuenta" class="java.lang.Boolean"/>
+		<field name="status_mobile" class="java.lang.Boolean"/>
+		<field name="ultimo_cambio_clave" class="java.sql.Date"/>
+		<field name="cambio_clave" class="java.lang.Boolean"/>
+		<field name="actualizar_datos" class="java.lang.Boolean"/>
+		<field name="estado_solicitud_articulos" class="java.lang.Boolean"/>
+		<field name="id_solicitud_aulasyarticulos" class="java.lang.Integer"/>
+	</subDataset>
+	<parameter name="idarticulo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT * FROM sgme.solicitudes so
+INNER JOIN sgme.solicitudes_articulos soar
+on so.id = soar.id_solicitudes
+INNER JOIN sgme.articulos ar
+on ar.id = soar.id_articulos
+INNER JOIN usuarios us
+on us.id = so.id_usuario
+where ar.id = $P{idarticulo}::integer]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="nombre_evento" class="java.lang.String"/>
+	<field name="fecha_creacion" class="java.sql.Timestamp"/>
+	<field name="num_participantes" class="java.lang.Integer"/>
+	<field name="id_usuario" class="java.lang.Integer"/>
+	<field name="observacion" class="java.lang.String"/>
+	<field name="estado" class="java.lang.Boolean"/>
+	<field name="id_sede" class="java.lang.Integer"/>
+	<field name="id_solicitudes" class="java.lang.Integer"/>
+	<field name="id_articulos" class="java.lang.Integer"/>
+	<field name="nombre" class="java.lang.String"/>
+	<field name="id_subcategoria" class="java.lang.Integer"/>
+	<field name="cantidad" class="java.lang.Integer"/>
+	<field name="referencia" class="java.lang.String"/>
+	<field name="material_consumible" class="java.lang.Boolean"/>
+	<field name="rol" class="java.lang.String"/>
+	<field name="nombre_usuario" class="java.lang.String"/>
+	<field name="clave_acceso" class="java.lang.String"/>
+	<field name="nivel_seguridad" class="java.lang.String"/>
+	<field name="serie_randomica" class="java.lang.String"/>
+	<field name="id_persona" class="java.lang.Long"/>
+	<field name="ultimo_acceso" class="java.sql.Timestamp"/>
+	<field name="id_empresa" class="java.lang.Long"/>
+	<field name="bloqueo_cuenta" class="java.lang.Boolean"/>
+	<field name="status_mobile" class="java.lang.Boolean"/>
+	<field name="ultimo_cambio_clave" class="java.sql.Date"/>
+	<field name="cambio_clave" class="java.lang.Boolean"/>
+	<field name="actualizar_datos" class="java.lang.Boolean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="416" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="102" height="79" uuid="0c6b4999-f681-4fd8-8e85-019f25263196"/>
+				<imageExpression><![CDATA["C:\\Users\\Sistemas\\Downloads\\logo_color_unicesmag.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="2" y="0" width="555" height="79" uuid="94f55c2b-ca83-439b-9ce5-4c4f07946882"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Prestamo de " + $F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="79" width="169" height="35" uuid="fe248113-de1f-429c-97ca-88161dd4fce3"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Rol: " + $F{rol}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="114" width="555" height="35" uuid="0d8b452d-e6ae-4773-bba7-4066162e348e"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nombre: " + $F{nombre_usuario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="149" width="553" height="27" uuid="b5639027-4b0a-44f9-94e6-9fa6e783fca7"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Se presta: " + $F{cantidad} + " " + $F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="176" width="555" height="75" uuid="197df142-26a2-41ed-85f1-64fabe46c65a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Se deja constancia que el día " + new java.text.SimpleDateFormat("dd/MM/yyyy 'a las' hh:mm:ss a").format(new java.util.Date()) + ", el usuario " + $F{nombre_usuario} + " ha solicitado el préstamo de " + $F{cantidad} + " " + $F{nombre} + "."]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement key="table" style="table" x="2" y="251" width="553" height="140" uuid="5eefa054-1bd0-4ba9-9f26-73bf4c48c37e"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="New Dataset 1" uuid="81148de1-dcef-4aa0-bbff-bd58c5a8520d">
+						<datasetParameter name="idarticulo">
+							<datasetParameterExpression><![CDATA[$P{idarticulo}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="52a086c7-3652-47d3-97a3-84a439ddf0ab">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="56a36338-a27d-486d-8b75-6a8831a5876f"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Arial" size="12"/>
+								</textElement>
+								<text><![CDATA[Nombre]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="db4a50d9-d73e-494b-8527-b57d08254841"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Arial" size="12"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="30d2e41c-f4de-4323-8f72-4fc6b0cc1b9e">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="c39671f9-4f0f-42a6-a2b0-1aeebf155cb3"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Arial" size="12"/>
+								</textElement>
+								<text><![CDATA[Cantidad]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="9e5693d1-3c1a-4e9f-ab84-d735b304597c"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Arial" size="12"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="13ac0dfa-cd86-4847-a458-993a44bb45fe">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="bee2f167-27c2-4921-ab7d-7fa324b3af49"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Arial" size="12"/>
+								</textElement>
+								<text><![CDATA[Referencia]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="75e34ab4-67b9-4810-bd1d-df9cdb7cff6a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Arial" size="12"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{referencia}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="be1a3391-bab3-442c-9d9b-71bae619f4f8">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="7ee1327b-f900-4c20-adb7-f0b629ed8b6e"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Arial" size="12"/>
+								</textElement>
+								<text><![CDATA[Estado]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="85e8d904-fce1-4fbf-afa6-24488a415a69"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Arial" size="12"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{estado_solicitud_articulos} ? "Disponible" : "No Disponible"]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<textField>
+				<reportElement x="386" y="79" width="169" height="35" uuid="e80378cb-3d7e-4ec0-bac3-2cbe70b3d912"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ID: " + $P{idarticulo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="2" y="34" width="268" height="20" uuid="6f785cfb-448a-4d64-8045-e613ebd3b6d4"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Generado por: " + $F{nombre_usuario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="276" y="34" width="279" height="20" uuid="c6fe2b40-fb87-438e-8a87-c2c8c37234c7"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pág. " + $V{PAGE_NUMBER} + " de " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20" uuid="a19d62ef-db7d-4662-afb4-b605b0735d08"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Universidad CESMAG: "Hombres nuevos para tiempos nuevos"]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

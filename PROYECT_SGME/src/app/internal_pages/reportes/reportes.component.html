@@ -8,5 +8,8 @@
       <div *ngIf="savedValue" class="alert alert-success mt-3" role="alert">
         Información guardada: {{ savedValue }}
       </div>
+      <div class="report-container">
+        <button (click)="downloadReport()">Descargar Reporte</button>
+      </div>
     </div>
   </div>
