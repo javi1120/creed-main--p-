@@ -13,6 +13,7 @@ import { GestionSolicitudesComponent } from './internal_pages/gestion-solicitude
 import { GenerarCodigoElementosComponent } from './internal_pages/generar-codigo-elementos/generar-codigo-elementos.component';
 import { GestionUsuariosComponent } from './internal_pages/gestion-usuarios/gestion-usuarios.component';
 import { InvetarioComponent } from './internal_pages/invetario/invetario.component';
+import { ReportesComponent } from './internal_pages/reportes/reportes.component';
 
 export const routes: Routes = [
     {path:'', component:HomeComponent},
@@ -27,6 +28,7 @@ export const routes: Routes = [
     {path:'menu_flotante',component:MenuFlotanteComponent, canActivate:[permisosGuard]},
     {path:'menu',component:MenuComponent, canActivate:[permisosGuard]},
     {path: 'reservacion', component:ReservacionComponent, canActivate:[permisosGuard]},
+    {path:'reportes',component:ReportesComponent},
     {path: '**', redirectTo:''}
 ];
 
