@@ -1,7 +1,5 @@
 package com.example.reports;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.jdbc.core.JdbcTemplate;
-//import org.springframework.stereotype.Service;
+
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.core.io.ClassPathResource;
@@ -9,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api/reports")
-public class ReportsSgmeApplication {
+public class ReportsSgmeApplicationTest {
 
     private static final Logger logger = LoggerFactory.getLogger(ReportsSgmeApplication.class);
 
