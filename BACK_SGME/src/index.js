@@ -7,7 +7,6 @@ const pool = require('../src/database/connection');
 const rutasoapcontroller = require('../src/controllers/soapcontroller');
 const rutassesion = require('../src/controllers/sesioncontroller');
 const rutasinventario = require('../src/controllers/inventariocontroller');
-//const reportesRouter = require('../src/controllers/reportesservice'); // Importa el router de reportes desde services
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const cors = require("cors");
@@ -27,8 +26,6 @@ app.use(cors({
   credentials: true // Permite enviar cookies de sesión
 }));
 
-
-
 // Ruta para recibir la solicitud SOAP y reenviarla
 app.post('/soap', (req, res) => {
   console.log('sopa1', req.body);
@@ -43,10 +40,6 @@ app.post('/soap', (req, res) => {
   const pCxc_Refe = consultacarteraryt[0].pcxc_refe[0];
 
   console.log('emp_codi', pEmp_Codi);
-    /* const params = req.body;
-    const pEmp_Codi = params.pEmp_Codi;
-    const pCli_Coda = params.pCli_Coda;
-    const pCxc_Refe = params.pCxc_Refe; */
   const xml = `
     <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://example.com/">
        <soapenv:Header/>
@@ -82,6 +75,20 @@ app.post('/soap', (req, res) => {
   });
 });
 
+// Añadir aquí el endpoint para generar el PDF
+//app.post('/sgme/generarpdf2', async (req, res) => {
+ // try {
+   // console.log('_____________________________node______________________________',req);
+    
+    //const datos = req.body;
+    //const perfildatos = await rutasinventario.generarpdf(datos);
+    //res.json(perfildatos);
+  //} catch (error) {
+    //console.error(error);
+    //res.status(500).send('Error interno del servidor');
+  //}
+//});
+
 app.post('/InsertarRecaudoCausado', verificarToken, rutasoapcontroller.InsertarRecaudoCausado);
 app.post('/ConsultaCarteraRyT', verificarToken, rutasoapcontroller.ConsultaCarteraRyT);
 app.post('/login', rutasoapcontroller.login);
@@ -112,12 +119,11 @@ app.post('/sgme/actualizarestadosubcategoria', rutasinventario.actualizarestados
 app.post('/sgme/Actualizarestadoarticulo', rutasinventario.Actualizarestadoarticulo);
 app.get('/sgme/conteocatsubarticulos', rutasinventario.conteocatsubarticulos);
 app.get('/sgme/sectores', rutasinventario.sectores);
-
+//app.post('/sgme/generarpdf', rutasinventario.generarpdf);
 app.post('/sgme/listararticulossolicitud', rutasinventario.listararticulossolicitud);
 app.post('/sgme/listarcategoriassolicitud', rutasinventario.listarcategoriassolicitud);
 app.post('/sgme/obtenercantidadarticulos', rutasinventario.obtenercantidadarticulos);
 app.post('/sgme/solicitudes', rutasinventario.solicitudes);
-app.post('/sgme/generarpdf', rutasinventario.generarpdf);
 app.use(session({
   secret: 'my-secret-key', // Clave secreta para la firma de cookies
   resave: false, // No volver a guardar la sesión si no se ha modificado

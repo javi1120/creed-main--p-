@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportelista" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6a2bd33c-a60f-4db7-9c8b-e46c452dea34">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="1"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -46,7 +46,7 @@ INNER JOIN
 INNER JOIN
     usuarios us
     ON us.id = so.id_usuario
-where ar.id = $P{idarticulo} ::integer]]>
+where ar.id = 61]]>
 		</queryString>
 		<field name="id" class="java.lang.Integer"/>
 		<field name="nombre_evento" class="java.lang.String"/>
@@ -58,9 +58,9 @@ where ar.id = $P{idarticulo} ::integer]]>
 		<field name="id_sede" class="java.lang.Integer"/>
 		<field name="id_solicitudes" class="java.lang.Integer"/>
 		<field name="id_articulos" class="java.lang.Integer"/>
+		<field name="cantidad" class="java.lang.Integer"/>
 		<field name="nombre" class="java.lang.String"/>
 		<field name="id_subcategoria" class="java.lang.Integer"/>
-		<field name="cantidad" class="java.lang.Integer"/>
 		<field name="referencia" class="java.lang.String"/>
 		<field name="material_consumible" class="java.lang.Boolean"/>
 		<field name="rol" class="java.lang.String"/>
@@ -90,7 +90,8 @@ INNER JOIN sgme.articulos ar
 on ar.id = soar.id_articulos
 INNER JOIN usuarios us
 on us.id = so.id_usuario
-where ar.id = $P{idarticulo}::integer]]>
+where ar.id = 61
+]]>
 	</queryString>
 	<field name="id" class="java.lang.Integer"/>
 	<field name="nombre_evento" class="java.lang.String"/>
@@ -102,9 +103,9 @@ where ar.id = $P{idarticulo}::integer]]>
 	<field name="id_sede" class="java.lang.Integer"/>
 	<field name="id_solicitudes" class="java.lang.Integer"/>
 	<field name="id_articulos" class="java.lang.Integer"/>
+	<field name="cantidad" class="java.lang.Integer"/>
 	<field name="nombre" class="java.lang.String"/>
 	<field name="id_subcategoria" class="java.lang.Integer"/>
-	<field name="cantidad" class="java.lang.Integer"/>
 	<field name="referencia" class="java.lang.String"/>
 	<field name="material_consumible" class="java.lang.Boolean"/>
 	<field name="rol" class="java.lang.String"/>

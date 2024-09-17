@@ -241,15 +241,17 @@ const crearcategoria = async (req , res) => {
     }catch (error){
     }  
   } 
-  const generarpdf = async (req , res) => {
-    try {      
-        const datos = req.body;
-        const perfildatos = await servicessesion.generarpdf(datos);
-        res.json(perfildatos);
+//  const generarpdf = async (req , res) => {
+  //  try {    
+    //  console.log(req);
+        
+      //  const datos = req.body;
+        //const perfildatos = await servicessesion.generarpdf(datos);
+        //res.json(perfildatos);
        // res.send(perfildatos);
-    }catch (error){
-    }  
-  } 
+ //   }catch (error){
+   // }  
+  //} 
   
   module.exports = {
     crearcategoria,
@@ -275,5 +277,5 @@ const crearcategoria = async (req , res) => {
     obtenercantidadarticulos,
     sectores,
     solicitudes,
-    generarpdf
+   // generarpdf
 } 

@@ -513,21 +513,24 @@ const conteocatsubarticulos = async(params) => {
     }
 }
 
-const generarpdf = async(params) => {
-    try {
-
-        const id_articulo = params.id_articulo;
-    
-        const response = await pool.query(
-            `SELECT * from sgme.articulos where id = $1` 
-        ,[id_articulo]);
+//const generarpdf = async(params) => {
+    //try {
+     //   console.log('params',params);
         
-        return response.rows;
+       // console.log('param id_art',params.id_articulo);
 
-    } catch (error) {
-        throw error;    
-    }
-}
+      //  const id_articulo = params.id_articulo;
+    
+       // const response = await pool.query(
+       //     `SELECT * from sgme.articulos where id = $1` 
+        //,[id_articulo]);
+        
+     //   return response.rows;
+
+   // } catch (error) {
+       // throw error;    
+   // }
+//}
 
 const sectores = async(params) => {
     try {
@@ -636,5 +639,5 @@ module.exports = {
     obtenercantidadarticulos,
     sectores,
     solicitudes,
-    generarpdf
+   // generarpdf
 }
