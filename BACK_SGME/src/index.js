@@ -7,6 +7,8 @@ const pool = require('../src/database/connection');
 const rutasoapcontroller = require('../src/controllers/soapcontroller');
 const rutassesion = require('../src/controllers/sesioncontroller');
 const rutasinventario = require('../src/controllers/inventariocontroller');
+const aulasController = require('../src/controllers/aulascontroller');
+const aulaservices = require('../src/services/aulaservices');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const cors = require("cors");
@@ -124,6 +126,9 @@ app.post('/sgme/listararticulossolicitud', rutasinventario.listararticulossolici
 app.post('/sgme/listarcategoriassolicitud', rutasinventario.listarcategoriassolicitud);
 app.post('/sgme/obtenercantidadarticulos', rutasinventario.obtenercantidadarticulos);
 app.post('/sgme/solicitudes', rutasinventario.solicitudes);
+app.post('/sgme/programas', aulasController.getProgramas);
+app.post('/sgme/docentes', aulasController.getDocentes);
+app.post('/sgme/asignaturas', aulasController.getAsignaturas);
 app.use(session({
   secret: 'my-secret-key', // Clave secreta para la firma de cookies
   resave: false, // No volver a guardar la sesión si no se ha modificado

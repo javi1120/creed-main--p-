@@ -14,12 +14,12 @@ import { GenerarCodigoElementosComponent } from './internal_pages/generar-codigo
 import { GestionUsuariosComponent } from './internal_pages/gestion-usuarios/gestion-usuarios.component';
 import { InvetarioComponent } from './internal_pages/invetario/invetario.component';
 import { ReportesComponent } from './internal_pages/reportes/reportes.component';
-
+import { ReservasaulasComponent } from './internal_pages/reservasaulas/reservasaulas.component';
 export const routes: Routes = [
     {path:'', component:HomeComponent},
     {path:'inicio', component:InicioComponent, canActivate:[permisosGuard]},
     {path:'solicitudes', component:SolicitudesComponent, canActivate:[permisosGuard]},
-    {path:'inventario_sgme', component:InvetarioComponent, canActivate:[permisosGuard]},
+    {path:'', component:InvetarioComponent, canActivate:[permisosGuard]},
     {path:'gestion_solicitudes', component:GestionSolicitudesComponent, canActivate:[permisosGuard]},
     {path:'crear_usuario', component:CrearUsuarioComponent, canActivate:[permisosGuard]},
     {path:'gestion_usuarios', component:GestionUsuariosComponent, canActivate:[permisosGuard]},
@@ -29,6 +29,8 @@ export const routes: Routes = [
     {path:'menu',component:MenuComponent, canActivate:[permisosGuard]},
     {path: 'reservacion', component:ReservacionComponent, canActivate:[permisosGuard]},
     {path:'reportes',component:ReportesComponent},
+    {path: 'reservasaulas', component: ReservasaulasComponent},
+   //{path: 'reservasaulas', component: ReservasaulasComponent, canActivate: [permisosGuard]},
     {path: '**', redirectTo:''}
 ];
 
