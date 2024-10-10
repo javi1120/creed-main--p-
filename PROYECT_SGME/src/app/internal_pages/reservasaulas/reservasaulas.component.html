@@ -1,0 +1,92 @@
+<div class="container pt-5">
+  <h1>Reserva de aulas</h1>
+  <div class="formulario">
+      <h4>Reserva de aulas - 2</h4>
+      <hr>
+      <div class="row">
+        <div class="col-sm-4 col-lg-4">
+          <label>Categorías:</label>
+          <select class="form-select" [(ngModel)]="id_categoria_sub"  (change)="listarsubcategorias()" [ngModelOptions]="{standalone: true}">
+            <option *ngFor="let cate of categorias" [value]="cate.id" >{{cate.nombre}}</option>
+        </select>
+          <div> </div>
+          <label>Programa:</label>
+          <select class="form-select" [(ngModel)]="selectedPrograma" (change)="listarDocentes()">
+            <option *ngFor="let programa of programas" [value]="programa.id">{{programa.nombre}}</option>
+          </select>
+          <label>Fecha de reserva:</label>
+          <input type="date" placeholder="Fecha de reserva" class="form-control" formControlName="fecha_reserva" (mouseenter)="onMouseEnter(1)" (mouseout)="onMouseOut(1)">
+          <label>Novedad:</label>
+          <textarea class="form-control" placeholder="Novedad" formControlName="novedad"></textarea>
+        </div>
+        <div class="col-sm-4 col-lg-4">
+          <label>Subcategorías:</label>
+          <select class="form-select" [(ngModel)]="id_subcate" [ngModelOptions]="{standalone: true}" (change)="listararticulossolicitud()"> 
+            <option *ngFor="let subcate of subcategorias" [value]="subcate.id">{{subcate.nombre}}</option>
+        </select>
+        <label>Docente:</label>
+        <select class="form-select" [(ngModel)]="id_docente" [ngModelOptions]="{standalone: true}"(change)="listarAsignaturas()">
+          <option *ngFor="let docente of docentes" [value]="docente.id">{{docente.primer_nombre}} {{docente.segundo_nombre}} {{docente.primer_apellido}} {{docente.segundo_apellido}}</option>
+        </select>
+          <div class="col-sm-4 col-lg-4">
+            <label>Hora - Inicio:</label>
+            <select class="form-select select-large select-wide" formControlName="hora_inicio">
+              <option value="7:00 AM">7:00 AM</option>
+              <option value="7:50 AM">7:50 AM</option>
+              <option value="8:40 AM">8:40 AM</option>
+              <option value="9:30 AM">9:30 AM</option>
+              <option value="10:20 AM">10:20 AM</option>
+              <option value="11:10 AM">11:10 AM</option>
+              <option value="12:00 PM">12:00 PM</option>
+              <option value="12:50 PM">12:50 PM</option>
+              <option value="1:50 PM">1:50 PM</option>
+              <option value="2:40 PM">2:40 PM</option>
+              <option value="3:30 PM">3:30 PM</option>
+              <option value="4:20 PM">4:20 PM</option>
+              <option value="5:10 PM">5:10 PM</option>
+              <option value="6:15 PM">6:15 PM</option>
+              <option value="7:05 PM">7:05 PM</option>
+              <option value="7:55 PM">7:55 PM</option>
+              <option value="8:15 PM">8:15 PM</option>
+              <option value="9:05 PM">9:05 PM</option>
+              <option value="9:55 PM">9:55 PM</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-4 col-lg-4">
+          <label>Aulas:</label>
+          <select class="form-select" [(ngModel)]="id_articulo" (change)="listararticulossolicitud()" >
+            <option *ngFor="let articulo of listaarticulos" [value]="articulo.id">{{articulo.nombre}}</option>
+          </select>
+          <label>Asignaturas:</label>
+          <select class="form-select" >
+            <option *ngFor="let asignatura of asignaturas" [value]="asignatura.id">{{asignatura.nombre}}</option>
+          </select>
+          <div class="col-sm-4 col-lg-4">
+            <label>Hora - Fin:</label>
+            <select class="form-select select-large select-wide" formControlName="hora_fin">
+              <option value="7:50 AM">7:50 AM</option>
+              <option value="8:40 AM">8:40 AM</option>
+              <option value="9:30 AM">9:30 AM</option>
+              <option value="10:20 AM">10:20 AM</option>
+              <option value="11:10 AM">11:10 AM</option>
+              <option value="12:00 PM">12:00 PM</option>
+              <option value="12:50 PM">12:50 PM</option>
+              <option value="1:50 PM">1:50 PM</option>
+              <option value="2:40 PM">2:40 PM</option>
+              <option value="3:30 PM">3:30 PM</option>
+              <option value="4:20 PM">4:20 PM</option>
+              <option value="5:10 PM">5:10 PM</option>
+              <option value="6:15 PM">6:15 PM</option>
+              <option value="7:05 PM">7:05 PM</option>
+              <option value="7:55 PM">7:55 PM</option>
+              <option value="8:15 PM">8:15 PM</option>
+              <option value="9:05 PM">9:05 PM</option>
+              <option value="9:55 PM">9:55 PM</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-12 mt-3 boton">
+          <button>Guardar</button>
+        </div>
+      </div>
