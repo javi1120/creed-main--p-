@@ -129,6 +129,7 @@ app.post('/sgme/solicitudes', rutasinventario.solicitudes);
 app.post('/sgme/programas', aulasController.getProgramas);
 app.post('/sgme/docentes', aulasController.getDocentes);
 app.post('/sgme/asignaturas', aulasController.getAsignaturas);
+app.post('/sgme/reservasaulas', aulasController.reservasolicitud);
 app.use(session({
   secret: 'my-secret-key', // Clave secreta para la firma de cookies
   resave: false, // No volver a guardar la sesión si no se ha modificado

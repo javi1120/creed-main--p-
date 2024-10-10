@@ -19,7 +19,7 @@ export const routes: Routes = [
     {path:'', component:HomeComponent},
     {path:'inicio', component:InicioComponent, canActivate:[permisosGuard]},
     {path:'solicitudes', component:SolicitudesComponent, canActivate:[permisosGuard]},
-    {path:'', component:InvetarioComponent, canActivate:[permisosGuard]},
+    {path:'inventario_sgme', component:InvetarioComponent, canActivate:[permisosGuard]},
     {path:'gestion_solicitudes', component:GestionSolicitudesComponent, canActivate:[permisosGuard]},
     {path:'crear_usuario', component:CrearUsuarioComponent, canActivate:[permisosGuard]},
     {path:'gestion_usuarios', component:GestionUsuariosComponent, canActivate:[permisosGuard]},
