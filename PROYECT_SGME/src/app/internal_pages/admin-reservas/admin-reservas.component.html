@@ -1,0 +1,32 @@
+<div class="container mt-5">
+    <h1>Administrar Reservas</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Aula</th>
+          <th>Asignatura</th>
+          <th>Fecha de Reserva</th>
+          <th>Fecha Fin de Reserva</th>
+          <th>Novedad</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reserva of reservas">
+          <td>{{ reserva.primer_nombre }} {{ reserva.segundo_nombre }} {{ reserva.primer_apellido }} {{ reserva.segundo_apellido }}</td>
+          <td>{{ reserva.id_articulo }}</td>
+          <td>{{ reserva.id_asignacion_academica }}</td>
+          <td>{{ reserva.fecha_reserva }}</td>
+          <td>{{ reserva.fecha_fin_reserva }}</td>
+          <td>{{ reserva.novedad }}</td>
+          <td>{{ reserva.estado ? 'Aprobada' : 'Pendiente' }}</td>
+          <td>
+        <!--     <button class="btn btn-success" (click)="aprobarReserva(reserva.id)">Aprobar</button>
+            <button class="btn btn-danger" (click)="rechazarReserva(reserva.id)">Rechazar</button> -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
