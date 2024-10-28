@@ -15,6 +15,7 @@ import { GestionUsuariosComponent } from './internal_pages/gestion-usuarios/gest
 import { InvetarioComponent } from './internal_pages/invetario/invetario.component';
 import { ReportesComponent } from './internal_pages/reportes/reportes.component';
 import { ReservasaulasComponent } from './internal_pages/reservasaulas/reservasaulas.component';
+import { AdminReservasComponent } from './internal_pages/admin-reservas/admin-reservas.component';
 export const routes: Routes = [
     {path:'', component:HomeComponent},
     {path:'inicio', component:InicioComponent, canActivate:[permisosGuard]},
@@ -30,6 +31,7 @@ export const routes: Routes = [
     {path: 'reservacion', component:ReservacionComponent, canActivate:[permisosGuard]},
     {path:'reportes',component:ReportesComponent},
     {path: 'reservasaulas', component: ReservasaulasComponent},
+    {path: 'admin_reservas', component: AdminReservasComponent},
    //{path: 'reservasaulas', component: ReservasaulasComponent, canActivate: [permisosGuard]},
     {path: '**', redirectTo:''}
 ];

@@ -4,7 +4,15 @@
 }
 
 .menu{
-    
+    background-color: #3f51b5; /* Color de fondo */
+    color: white; /* Color del texto */
+    padding: 10px; /* Espaciado interno */
+    font-size: 16px; /* Tamaño de la fuente */
+    border-radius: 4px; /* Bordes redondeados */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra */
+    display: flex; /* Flexbox para alinear elementos */
+    align-items: center; /* Alineación vertical */
+    justify-content: space-between; /* Espaciado entre elementos */
 }
 
 .conponentes{

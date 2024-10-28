@@ -42,9 +42,25 @@ const reservasolicitud = async (req, res) => {
     res.status(500).send('Error en el servidor');
   }
 };
+
+
+const nomusu = async (req, res) => {
+  try {
+    console.log('si llego - nomusu');
+    const params = req.body;
+    const resultado = await aulasService.nomusu(params);
+    console.log('Datos de usuario enviados al frontend:', resultado);
+    res.json(resultado);
+  } catch (error) {
+    console.error('Error en nomusu:', error);
+    res.status(500).send('Error en el servidor');
+  }
+};
+
 module.exports = {
   getProgramas,
   getDocentes,
   getAsignaturas,
-  reservasolicitud
+  reservasolicitud,
+  nomusu
 } 

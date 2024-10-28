@@ -76,6 +76,7 @@ export class ReservasaulasComponent {
   programas: Programa[] = []; 
   formRese: FormGroup;
   idarti:any;
+  id_prueba:any;
 
   // Definición del arreglo de horas
   horas: string[] = [
@@ -91,10 +92,9 @@ export class ReservasaulasComponent {
       selectedPrograma: ['', Validators.required],
       fecha_reserva: ['', Validators.required],
       novedad: ['', Validators.required],
-      //id_categoria_sub: ['', Validators.required],
-      //id_subcate: ['', Validators.required],
+      id_categoria_sub: [''],
+      id_subcate: [''],
       id_docente: ['', Validators.required],
-      //hora_inicio: ['', Validators.required],
       id_articulo: ['', Validators.required],
       id_asignaturas_plan_estudio: ['', Validators.required],
       fecha_fin_reserva: ['', Validators.required]
@@ -188,7 +188,7 @@ export class ReservasaulasComponent {
       await this.inventarioService.listararticulossolicitud(this.id_usuario.sgmed3, this.id_subcate).subscribe(
         res => {
           console.log('articulos',res);
-          console.log('ar',this.idarti);
+          console.log('ar',this.idarti); //llega undefined
           this.listaarticulos = <Articulos[]><any>res;           
           this.cantidad = '';
         }, error => {
@@ -215,6 +215,7 @@ export class ReservasaulasComponent {
       await this.programaService.getDocentes(this.formRese.get('selectedPrograma')?.value).subscribe(
         res => {
           this.docentes = res as Docente[];
+          console.log('Docentes:',res);
         }, error => {
           console.error('Error al obtener los docentes', error);
         }
@@ -224,19 +225,46 @@ export class ReservasaulasComponent {
     }
   }
 
-  async listarAsignaturas() {
-    if (this.formRese.get('id_docente')?.value) {
-      await this.programaService.getAsignaturas(this.formRese.get('id_docente')?.value).subscribe(
+  /* async listarAsignaturas() {
+    console.log('id_ docente',this.id_docente);
+    const idDocenteGuardado = this.id_docente;
+    if (this.id_docente) {
+      await this.programaService.getAsignaturas(this.id_docente).subscribe(
         res => {
           this.asignaturas = <Asignatura[]><any>res; 
+          this.id_docente = this.docentes[idDocenteGuardado].Id;
+          console.log('id_docente',this.id_docente);
         }, error => {
           console.error('Error al obtener las asignaturas', error);
+          
         }
       );
     } else {
       console.error('id_docente es undefined');
     }
-  }
+  } */
+
+    async listarAsignaturas() {
+      const id_docente = this.formRese.get('id_docente')?.value;
+      console.log('id_docente desde el formulario:', id_docente);
+    
+      // Guardar el id_docente en otra variable
+      const idDocenteGuardado = id_docente;
+      console.log('idDocenteGuardado:', idDocenteGuardado);
+    
+      if (id_docente) {
+        await this.programaService.getAsignaturas(id_docente).subscribe(
+          res => {
+            this.asignaturas = <Asignatura[]><any>res; 
+            console.log('Asignaturas obtenidas:', this.asignaturas);
+          }, error => {
+            console.error('Error al obtener las asignaturas', error);
+          }
+        );
+      } else {
+        console.error('id_docente es undefined');
+      }
+    }
 
   async sectores() {
     await this.inventarioService.sectores().subscribe(

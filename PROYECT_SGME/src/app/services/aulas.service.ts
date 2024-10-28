@@ -47,6 +47,10 @@ export class ProgramaService {
         "novedad":datossol.novedad,
       }, { headers });
   }
+  getNomusu(id_usuario: number): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.httpclient.post(this.url + 'nomusu', { id_usuario }, { headers });
+  }
   
   //
 }

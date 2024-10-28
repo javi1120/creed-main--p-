@@ -28,7 +28,7 @@
           </select>
           <label>Docente:</label>
           <select class="form-select" formControlName="id_docente" (change)="listarAsignaturas()">
-            <option *ngFor="let docente of docentes" [value]="docente.id">
+            <option *ngFor="let docente of docentes" [value]="docente.Id">
               {{docente.primer_nombre}} {{docente.segundo_nombre}} {{docente.primer_apellido}} {{docente.segundo_apellido}}
             </option>
           </select>

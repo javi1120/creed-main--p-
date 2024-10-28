@@ -9,6 +9,7 @@ const getProgramas = async () => {
       `SELECT id,nombre
       FROM programas AS po
       WHERE po.activado = 'S' 
+      and po.publicado = 'S'
       AND po.clase_programa NOT IN ('MV')` 
     );
 
@@ -27,19 +28,46 @@ const getDocentes = async (params) => {
     console.log('id_programa:', id_programa); // Log para verificar el valor de id_programa
 
     const response = await pool.query(
-      `SELECT DISTINCT
-        per.primer_nombre,
-        per.segundo_nombre,
+      ` SELECT
+        d.id::integer AS "Id",
+        0::integer AS "No.",
+        pr.nombre AS "Programa",
         per.primer_apellido,
         per.segundo_apellido,
-        doc.*
-FROM docentes doc
-INNER JOIN personas per ON doc.id_persona = per.id
-INNER JOIN asignacion_academica asigc ON asigc.id_docente = doc.id
-INNER JOIN programas prog ON doc.id_programa = prog.id
-WHERE doc.id_programa = $1 
-  AND asigc.id_periodo_academico = (SELECT id FROM periodos_academicos WHERE estado = 2) 
-  AND doc.estado = true;
+        per.primer_nombre,
+        per.segundo_nombre,
+        --d.id as id_docente,
+        (SELECT anio FROM periodos_academicos WHERE actual = true) AS "Ano",
+        (SELECT periodo FROM periodos_academicos WHERE actual = true) AS "Periodo"
+    FROM
+        asignacion_academica aa
+    INNER JOIN
+        periodos_academicos pa1 ON aa.id_periodo_academico = pa1.id
+    LEFT JOIN
+        docentes d ON aa.id_docente = d.id
+    LEFT JOIN
+        personas per ON d.id_persona = per.id
+    LEFT JOIN
+        contrataciones c ON per.id = c.id_persona AND c.id_cargo = 63
+    LEFT JOIN
+        contrataciones_docentes cd ON c.id = cd.id_contratacion
+    LEFT JOIN
+        periodos_academicos pa2 ON cd.id_periodo_academico = pa2.id AND pa2.anio = (SELECT anio FROM periodos_academicos WHERE actual = true) AND pa2.periodo = (SELECT periodo FROM periodos_academicos WHERE actual = true) AND pa2.id_tipo_periodo = 1
+    INNER JOIN
+        asignaturas_plan_estudios ape ON aa.id_asignaturas_plan_estudios = ape.id
+    INNER JOIN
+        planes_estudio pe ON ape.id_plan_estudios = pe.id
+    INNER JOIN
+        programas pr ON pe.id_programa = pr.id
+    WHERE
+        pa1.anio = (SELECT anio FROM periodos_academicos WHERE actual = true)
+        AND pa1.periodo = (SELECT periodo FROM periodos_academicos WHERE actual = true)
+        AND pa1.id_tipo_periodo = 1
+        AND aa.asignacion_activa = true
+        AND pr.id = (SELECT id FROM programas WHERE id = $1)
+        AND aa.id_tipo_asignacion NOT IN (11)
+    GROUP BY
+        per.primer_apellido, per.segundo_apellido, per.primer_nombre, per.segundo_nombre, d.id, "Programa", "Id"
 `, [id_programa] );
 
     console.log('Consulta ejecutada con éxito:', response.rows); // Log para verificar la respuesta de la consulta
@@ -57,29 +85,49 @@ const getAsignaturas = async (params) => {
     console.log('id_docente:', id_docente); // Log para verificar el valor de id
 
     const response = await pool.query( `
-SELECT DISTINCT ON (asig.id)
+			SELECT DISTINCT ON (asig.id)
     asig.id, 
-    asig.nombre, 
-    asig.abreviatura, 
-    asic.id AS asignacion_id, 
-    doc.id AS docente_id, 
-    prog.nombre AS docente_nombre, 
+		asic.id_docente,
     prog.id AS programa_id, 
-    prog.nombre AS programa_nombre 
+    prog.nombre AS programa_nombre,
+    asig.nombre
+
 FROM 
-    asignacion_academica asic 
+    usuarios u 
 INNER JOIN 
-    docentes doc ON doc.id = asic.id_docente 
+    personas p ON p.id = u.id_persona
 INNER JOIN 
-    asignaturas_plan_estudios asicape ON asicape.id = asic.id_asignaturas_plan_estudios 
+    contrataciones ct ON p.id = ct.id_persona
 INNER JOIN 
-    asignaturas asig ON asig.id = asicape.id_asignatura 
+    tipos_vinculacion tv ON tv.id = ct.id_vinculacion
 INNER JOIN 
-    programas prog ON doc.id_programa = prog.id 
+    contrataciones_docentes ctd ON ct.id = ctd.id_contratacion
+INNER JOIN 
+    escalafones es ON es.id = ctd.id_escalafon
+INNER JOIN 
+    docentes doc ON p.id = doc.id_persona
+INNER JOIN 
+    asignacion_academica asic ON doc.id = asic.id_docente
+INNER JOIN 
+    semestres s ON s.id = asic.id_semestre
+INNER JOIN 
+    asignaturas_plan_estudios asicape ON asicape.id = asic.id_asignaturas_plan_estudios
+INNER JOIN 
+    asignaturas asig ON asig.id = asicape.id_asignatura
+INNER JOIN 
+    planes_estudio pe ON pe.id = asicape.id_plan_estudios
+INNER JOIN 
+    programas prog ON prog.id = pe.id_programa
 WHERE 
-    asic.id_docente = $1
+ asic.id_docente = $1
+   AND  asic.id_periodo_academico = (SELECT id FROM periodos_academicos WHERE actual = true)
+    AND ctd.id_periodo_academico = (SELECT id FROM periodos_academicos WHERE actual = true)
+    AND asic.id_tipo_asignacion NOT IN (11)
+	and prog.clase_programa IN ('A','C','E','MV')
 ORDER BY 
-    asig.id; 
+    asig.id,  
+		asig.nombre,
+		asic.id_docente;
       `,[id_docente]);
 
     console.log('Consulta ejecutada con éxito:', response.rows); // Log para verificar la respuesta de la consulta
@@ -135,9 +183,38 @@ const reservasolicitud = async(params) => {
   }
 }
 
+const nomusu = async(params) => {
+  try {
+      const id_usuario = params.id_usuario;
+      
+      const response = await pool.query(`
+          SELECT u.id as id_usuario,per.nombre as perfil,per.id as id_perfil, u.nombre_usuario, p.primer_nombre, p.segundo_nombre, p.primer_apellido, 
+					p.segundo_apellido, p.numero_identificacion as cedula from personas p
+            INNER JOIN usuarios u on u.id_persona = p.id 
+            left JOIN sgme.usuarios_perfiles up on up.id_usuario = u.id
+            left JOIN sgme.perfiles per on up.id_perfil = per.id  
+            where up.id_usuario = $1
+            union 
+          SELECT u.id as id_usuario,per.nombre as perfil,per.id as id_perfil, u.nombre_usuario, p.primer_nombre, p.segundo_nombre, p.primer_apellido, 
+					p.segundo_apellido, p.numero_identificacion as cedula from personas p
+            INNER JOIN sgme.usuarios u on u.id_persona = p.id 
+            left JOIN sgme.usuarios_perfiles up on up.id_usuario = u.id
+            left JOIN sgme.perfiles per on up.id_perfil = per.id  
+            where up.id_usuario = '$1
+           `    ,[id_usuario]);
+      
+           console.log('Consulta ejecutada con éxito:', response.rows);
+
+  } catch (error) {
+      throw error;    
+  }
+}
+
+
 module.exports = {
   getProgramas,
   getDocentes,
   getAsignaturas,
-  reservasolicitud
+  reservasolicitud,
+  nomusu
 };
