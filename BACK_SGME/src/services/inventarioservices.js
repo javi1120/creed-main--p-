@@ -513,22 +513,6 @@ const conteocatsubarticulos = async(params) => {
     }
 }
 
-const generarpdf = async(params) => {
-    try {
-
-        const id_articulo = params.id_articulo;
-    
-        const response = await pool.query(
-            `SELECT * from sgme.articulos where id = $1` 
-        ,[id_articulo]);
-        
-        return response.rows;
-
-    } catch (error) {
-        throw error;    
-    }
-}
-
 const sectores = async(params) => {
     try {
         const response = await pool.query(
@@ -635,6 +619,5 @@ module.exports = {
     listarcategoriassolicitud,
     obtenercantidadarticulos,
     sectores,
-    solicitudes,
-    generarpdf
+    solicitudes
 }
