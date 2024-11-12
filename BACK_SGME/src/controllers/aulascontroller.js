@@ -57,10 +57,68 @@ const nomusu = async (req, res) => {
   }
 };
 
+const ceduladoc = async (req, res) => {
+  try {
+    console.log('si llego - ceduladoc');
+    const cedula = req.body.cedula; // Obtener la cédula desde el cuerpo de la solicitud
+    const params = { cedula };
+    const resultado = await aulasService.ceduladoc(params);
+    console.log('Datos de cédula enviados al frontend:', resultado);
+    res.json(resultado);
+  } catch (error) {
+    console.error('Error en ceduladoc:', error);
+    res.status(500).send('Error en el servidor');
+  }
+};
+
+const aulasbu = async (req, res) => {
+  try {
+    console.log('si llego - aulasbu');
+    const nombre_articulo = req.body.nombre_articulo; // Obtener el nombre del artículo desde el cuerpo de la solicitud
+    const params = { nombre_articulo };
+    const resultado = await aulasService.aulasbu(params);
+    console.log('Datos de aulas enviados al frontend:', resultado);
+    res.json(resultado);
+  } catch (error) {
+    console.error('Error en aulasbu:', error);
+    res.status(500).send('Error en el servidor');
+  }
+};
+
+const reservasporfecha = async (req, res) => {
+  try {
+    console.log('si llego - reservasporfecha');
+    const fecha = req.body.fecha; // Obtener la fecha desde el cuerpo de la solicitud
+    const params = { fecha };
+    const resultado = await aulasService.reservasporfecha(params);
+    console.log('Datos de reservas por fecha enviados al frontend:', resultado);
+    res.json(resultado);
+  } catch (error) {
+    console.error('Error en reservasporfecha:', error);
+    res.status(500).send('Error en el servidor');
+  }
+};
+
+const reservacalendario = async (req, res) => {
+  try {
+    console.log('si llego - reservacalendario');
+    const resultado = await aulasService.reservacalendario();
+    console.log('Datos de reservas para el calendario enviados al frontend:', resultado);
+    res.json(resultado);
+  } catch (error) {
+    console.error('Error en reservacalendario:', error);
+    res.status(500).send('Error en el servidor');
+  }
+};
+
 module.exports = {
   getProgramas,
   getDocentes,
   getAsignaturas,
   reservasolicitud,
-  nomusu
+  nomusu,
+  ceduladoc,
+  aulasbu,
+  reservasporfecha,
+  reservacalendario
 } 

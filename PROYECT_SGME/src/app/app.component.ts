@@ -6,11 +6,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { DatosServiceService } from './services/datos-service.service';
 import { HomeComponent } from './external_pages/home/home.component';
-
+import { FullCalendarModule } from '@fullcalendar/angular'; 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,RouterLink,MenuFlotanteComponent,ReservacionComponent,CommonModule,HomeComponent],
+  imports: [ FullCalendarModule, RouterOutlet,RouterLink,MenuFlotanteComponent,ReservacionComponent,CommonModule,HomeComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

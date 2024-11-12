@@ -146,6 +146,7 @@ const reservasolicitud = async(params) => {
       const id_articulo = params.id_articulo;
       const id_usuario = parseInt(params.id_usuario); // Asegúrate de que id_usuario sea un entero
       const id_asignacion_academica = params.id_asignacion_academica;
+      const id_docente = params.id_docente;
       const fecha_reserva = params.fecha_reserva;
      // const hora_inicio = params.hora_inicio;
       const fecha_fin_reserva = params.fecha_fin_reserva;
@@ -170,9 +171,9 @@ const reservasolicitud = async(params) => {
 
       /* Se inserta la solicitud de reserva en la tabla sgme.reserva_aulas */
       const response1 = await pool.query(
-          `INSERT INTO "sgme"."reserva_aulas"("id_usuario", "id_articulo", "id_asignacion_academica", "fecha_reserva", "fecha_fin_reserva", "estado","novedad") 
-          VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`, 
-          [id_usuario, id_articulo, id_asignacion_academica, fecha_reserva, fecha_fin_reserva, true, novedad]
+          `INSERT INTO "sgme"."reserva_aulas"("id_usuario", "id_articulo", "id_asignacion_academica", "fecha_reserva", "fecha_fin_reserva", "estado","novedad","id_docente") 
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`, 
+          [id_usuario, id_articulo, id_asignacion_academica, fecha_reserva, fecha_fin_reserva, true, novedad, id_docente]
       );    
       
       console.log('ID reserva generada', response1.rows[0].id);
@@ -210,11 +211,455 @@ const nomusu = async(params) => {
   }
 }
 
+const ceduladoc = async (params) => {
+  console.log('llego a ceduladoc');
+  const cedula = params.cedula;
+  console.log('cedula:', cedula);
+  try {
+    const response = await pool.query(`
+      SELECT 
+    u.id AS id_usuario,
+    per.nombre AS perfil,
+    per.id AS id_perfil,
+    u.nombre_usuario,
+    p.primer_nombre,
+    p.segundo_nombre,
+    p.primer_apellido,
+    p.segundo_apellido,
+    resa.id AS id_reserva,
+    arti.nombre AS nombre_articulo,
+    asic.id_docente,
+    asig.nombre AS nombre_asignatura,
+    resa.fecha_reserva,
+    resa.fecha_fin_reserva,
+    resa.estado,
+    resa.novedad,
+    p.numero_identificacion AS cedula,
+    -- Información completa del docente
+    (SELECT CONCAT(dper.primer_nombre, ' ', dper.segundo_nombre, ' ', dper.primer_apellido, ' ', dper.segundo_apellido)
+     FROM personas dper 
+     JOIN docentes doc ON dper.id = doc.id_persona
+     WHERE doc.id = asic.id_docente) AS nombre_completo_docente,
+    -- nombre_usuario y cedula del docente
+    (SELECT du.nombre_usuario FROM usuarios du WHERE du.id_persona = doc.id_persona) AS nombre_usuario_docente,
+    (SELECT dper.numero_identificacion FROM personas dper WHERE dper.id = doc.id_persona) AS cedula_docente
+FROM 
+    personas p
+INNER JOIN 
+    usuarios u ON u.id_persona = p.id 
+LEFT JOIN 
+    sgme.usuarios_perfiles up ON up.id_usuario = u.id
+LEFT JOIN 
+    sgme.perfiles per ON up.id_perfil = per.id  
+LEFT JOIN 
+    sgme.reserva_aulas resa ON u.id = resa.id_usuario
+LEFT JOIN 
+    sgme.articulos arti ON arti.id = resa.id_articulo
+LEFT JOIN 
+    asignaturas asig ON asig.id = resa.id_asignacion_academica
+LEFT JOIN 
+    docentes doc ON doc.id = resa.id_docente
+LEFT JOIN  
+    asignacion_academica asic ON doc.id = asic.id_docente
+WHERE 
+    (SELECT dper.numero_identificacion FROM personas dper WHERE dper.id = doc.id_persona) = $1
+
+UNION 
+
+SELECT 
+    u.id AS id_usuario,
+    per.nombre AS perfil,
+    per.id AS id_perfil,
+    u.nombre_usuario,
+    p.primer_nombre,
+    p.segundo_nombre,
+    p.primer_apellido,
+    p.segundo_apellido,
+    resa.id AS id_reserva,
+    arti.nombre AS nombre_articulo,
+    asic.id_docente,
+    asig.nombre AS nombre_asignatura,
+    resa.fecha_reserva,
+    resa.fecha_fin_reserva,
+    resa.estado,
+    resa.novedad,
+    p.cedula AS cedula,
+    -- Información completa del docente
+    (SELECT CONCAT(dper.primer_nombre, ' ', dper.segundo_nombre, ' ', dper.primer_apellido, ' ', dper.segundo_apellido)
+     FROM personas dper 
+     JOIN docentes doc ON dper.id = doc.id_persona
+     WHERE doc.id = asic.id_docente) AS nombre_completo_docente,
+    -- nombre_usuario y cedula del docente
+    (SELECT du.nombre_usuario FROM usuarios du WHERE du.id_persona = doc.id_persona) AS nombre_usuario_docente,
+    (SELECT dper.numero_identificacion FROM personas dper WHERE dper.id = doc.id_persona) AS cedula_docente
+FROM 
+    sgme.personas p
+INNER JOIN 
+    sgme.usuarios u ON u.id_persona = p.id 
+LEFT JOIN 
+    sgme.usuarios_perfiles up ON up.id_usuario = u.id
+LEFT JOIN 
+    sgme.perfiles per ON up.id_perfil = per.id  
+LEFT JOIN 
+    sgme.reserva_aulas resa ON u.id = resa.id_usuario
+LEFT JOIN 
+    sgme.articulos arti ON arti.id = resa.id_articulo
+LEFT JOIN 
+    asignaturas asig ON asig.id = resa.id_asignacion_academica
+LEFT JOIN 
+    docentes doc ON doc.id = resa.id_docente
+LEFT JOIN  
+    asignacion_academica asic ON doc.id = asic.id_docente
+WHERE 
+    (SELECT dper.numero_identificacion FROM personas dper WHERE dper.id = doc.id_persona) = $1;
+
+       ` , [cedula] );
+
+    console.log('Consulta ejecutada con éxito:', response.rows);
+    return response.rows;
+  } catch (error) {
+    console.error('Error al ejecutar la consulta:', error);
+    throw error;
+  }
+};
+
+const aulasbu = async (params) => {
+  const nombre_articulo = params.nombre_articulo;
+  try {
+    const response = await pool.query(`
+      SELECT 
+        u.id AS id_usuario,
+        per.nombre AS perfil,
+        per.id AS id_perfil,
+        u.nombre_usuario,
+        p.primer_nombre,
+        p.segundo_nombre,
+        p.primer_apellido,
+        p.segundo_apellido,
+        resa.id AS id_reserva,
+        arti.nombre AS nombre_articulo,
+        asic.id_docente,
+        asig.nombre AS nombre_asignatura,
+        resa.fecha_reserva,
+        resa.fecha_fin_reserva,
+        resa.estado,
+        resa.novedad,
+        p.numero_identificacion AS cedula,
+        -- Información completa del docente
+        (SELECT CONCAT(dper.primer_nombre, ' ', dper.segundo_nombre, ' ', dper.primer_apellido, ' ', dper.segundo_apellido)
+         FROM personas dper 
+         JOIN docentes doc ON dper.id = doc.id_persona
+         WHERE doc.id = asic.id_docente) AS nombre_completo_docente,
+        -- nombre_usuario y cedula del docente
+        (SELECT du.nombre_usuario FROM usuarios du WHERE du.id_persona = doc.id_persona) AS nombre_usuario_docente,
+        (SELECT dper.numero_identificacion FROM personas dper WHERE dper.id = doc.id_persona) AS cedula_docente
+      FROM 
+        personas p
+      INNER JOIN 
+        usuarios u ON u.id_persona = p.id 
+      LEFT JOIN 
+        sgme.usuarios_perfiles up ON up.id_usuario = u.id
+      LEFT JOIN 
+        sgme.perfiles per ON up.id_perfil = per.id  
+      LEFT JOIN 
+        sgme.reserva_aulas resa ON u.id = resa.id_usuario
+      LEFT JOIN 
+        sgme.articulos arti ON arti.id = resa.id_articulo
+      LEFT JOIN 
+        asignaturas asig ON asig.id = resa.id_asignacion_academica
+      LEFT JOIN 
+        docentes doc ON doc.id = resa.id_docente
+      LEFT JOIN  
+        asignacion_academica asic ON doc.id = asic.id_docente
+      WHERE 
+        arti.nombre = $1
+
+      UNION 
+
+      SELECT 
+        u.id AS id_usuario,
+        per.nombre AS perfil,
+        per.id AS id_perfil,
+        u.nombre_usuario,
+        p.primer_nombre,
+        p.segundo_nombre,
+        p.primer_apellido,
+        p.segundo_apellido,
+        resa.id AS id_reserva,
+        arti.nombre AS nombre_articulo,
+        asic.id_docente,
+        asig.nombre AS nombre_asignatura,
+        resa.fecha_reserva,
+        resa.fecha_fin_reserva,
+        resa.estado,
+        resa.novedad,
+        p.cedula AS cedula,
+        -- Información completa del docente
+        (SELECT CONCAT(dper.primer_nombre, ' ', dper.segundo_nombre, ' ', dper.primer_apellido, ' ', dper.segundo_apellido)
+         FROM personas dper 
+         JOIN docentes doc ON dper.id = doc.id_persona
+         WHERE doc.id = asic.id_docente) AS nombre_completo_docente,
+        -- nombre_usuario y cedula del docente
+        (SELECT du.nombre_usuario FROM usuarios du WHERE du.id_persona = doc.id_persona) AS nombre_usuario_docente,
+        (SELECT dper.numero_identificacion FROM personas dper WHERE dper.id = doc.id_persona) AS cedula_docente
+      FROM 
+        sgme.personas p
+      INNER JOIN 
+        sgme.usuarios u ON u.id_persona = p.id 
+      LEFT JOIN 
+        sgme.usuarios_perfiles up ON up.id_usuario = u.id
+      LEFT JOIN 
+        sgme.perfiles per ON up.id_perfil = per.id  
+      LEFT JOIN 
+        sgme.reserva_aulas resa ON u.id = resa.id_usuario
+      LEFT JOIN 
+        sgme.articulos arti ON arti.id = resa.id_articulo
+      LEFT JOIN 
+        asignaturas asig ON asig.id = resa.id_asignacion_academica
+      LEFT JOIN 
+        docentes doc ON doc.id = resa.id_docente
+      LEFT JOIN  
+        asignacion_academica asic ON doc.id = asic.id_docente
+      WHERE 
+        arti.nombre = $1
+    `, [nombre_articulo]);
+
+    console.log('Consulta ejecutada con éxito:', response.rows);
+    return response.rows;
+  } catch (error) {
+    console.error('Error al ejecutar la consulta:', error);
+    throw error;
+  }
+};
+
+
+const reservasporfecha = async (params) => {
+  const fecha = params.fecha;
+  try {
+    const response = await pool.query(`
+      SELECT
+        u.id AS id_usuario,
+        per.nombre AS perfil,
+        per.id AS id_perfil,
+        u.nombre_usuario,
+        p.primer_nombre,
+        p.segundo_nombre,
+        p.primer_apellido,
+        p.segundo_apellido,
+        resa.id AS id_reserva,
+        arti.nombre AS nombre_articulo,
+        asic.id_docente,
+        asig.nombre AS nombre_asignatura,
+        resa.fecha_reserva,
+        resa.fecha_fin_reserva,
+        resa.estado,
+        resa.novedad,
+        p.numero_identificacion AS cedula,
+        -- Información completa del docente
+        (SELECT CONCAT(dper.primer_nombre, ' ', dper.segundo_nombre, ' ', dper.primer_apellido, ' ', dper.segundo_apellido)
+         FROM personas dper
+         JOIN docentes doc ON dper.id = doc.id_persona
+         WHERE doc.id = asic.id_docente) AS nombre_completo_docente,
+        -- nombre_usuario y cedula del docente
+        (SELECT du.nombre_usuario FROM usuarios du WHERE du.id_persona = doc.id_persona) AS nombre_usuario_docente,
+        (SELECT dper.numero_identificacion FROM personas dper WHERE dper.id = doc.id_persona) AS cedula_docente
+      FROM
+        personas p
+      INNER JOIN
+        usuarios u ON u.id_persona = p.id
+      LEFT JOIN
+        sgme.usuarios_perfiles up ON up.id_usuario = u.id
+      LEFT JOIN
+        sgme.perfiles per ON up.id_perfil = per.id  
+      LEFT JOIN
+        sgme.reserva_aulas resa ON u.id = resa.id_usuario
+      LEFT JOIN
+        sgme.articulos arti ON arti.id = resa.id_articulo
+      LEFT JOIN
+        asignaturas asig ON asig.id = resa.id_asignacion_academica
+      LEFT JOIN
+        docentes doc ON doc.id = resa.id_docente
+      LEFT JOIN  
+        asignacion_academica asic ON doc.id = asic.id_docente
+      WHERE
+      DATE(resa.fecha_reserva) = $1
+
+
+      UNION
+
+
+      SELECT
+        u.id AS id_usuario,
+        per.nombre AS perfil,
+        per.id AS id_perfil,
+        u.nombre_usuario,
+        p.primer_nombre,
+        p.segundo_nombre,
+        p.primer_apellido,
+        p.segundo_apellido,
+        resa.id AS id_reserva,
+        arti.nombre AS nombre_articulo,
+        asic.id_docente,
+        asig.nombre AS nombre_asignatura,
+        resa.fecha_reserva,
+        resa.fecha_fin_reserva,
+        resa.estado,
+        resa.novedad,
+        p.cedula AS cedula,
+        -- Información completa del docente
+        (SELECT CONCAT(dper.primer_nombre, ' ', dper.segundo_nombre, ' ', dper.primer_apellido, ' ', dper.segundo_apellido)
+         FROM personas dper
+         JOIN docentes doc ON dper.id = doc.id_persona
+         WHERE doc.id = asic.id_docente) AS nombre_completo_docente,
+        -- nombre_usuario y cedula del docente
+        (SELECT du.nombre_usuario FROM usuarios du WHERE du.id_persona = doc.id_persona) AS nombre_usuario_docente,
+        (SELECT dper.numero_identificacion FROM personas dper WHERE dper.id = doc.id_persona) AS cedula_docente
+      FROM
+        sgme.personas p
+      INNER JOIN
+        sgme.usuarios u ON u.id_persona = p.id
+      LEFT JOIN
+        sgme.usuarios_perfiles up ON up.id_usuario = u.id
+      LEFT JOIN
+        sgme.perfiles per ON up.id_perfil = per.id  
+      LEFT JOIN
+        sgme.reserva_aulas resa ON u.id = resa.id_usuario
+      LEFT JOIN
+        sgme.articulos arti ON arti.id = resa.id_articulo
+      LEFT JOIN
+        asignaturas asig ON asig.id = resa.id_asignacion_academica
+      LEFT JOIN
+        docentes doc ON doc.id = resa.id_docente
+      LEFT JOIN  
+        asignacion_academica asic ON doc.id = asic.id_docente
+      WHERE
+       DATE(resa.fecha_reserva) = $1
+    `, [fecha]);
+
+    console.log('Consulta ejecutada con éxito:', response.rows);
+    return response.rows;
+  } catch (error) {
+    console.error('Error al ejecutar la consulta:', error);
+    throw error;
+  }
+};
+
+const reservacalendario = async () => {
+  try {
+    const response = await pool.query(`
+      SELECT
+        u.id AS id_usuario,
+        per.nombre AS perfil,
+        per.id AS id_perfil,
+        u.nombre_usuario,
+        p.primer_nombre,
+        p.segundo_nombre,
+        p.primer_apellido,
+        p.segundo_apellido,
+        resa.id AS id_reserva,
+        arti.nombre AS nombre_articulo,
+        asic.id_docente,
+        asig.nombre AS nombre_asignatura,
+        resa.fecha_reserva,
+        resa.fecha_fin_reserva,
+        resa.estado,
+        resa.novedad,
+        p.numero_identificacion AS cedula,
+        -- Información completa del docente
+        (SELECT CONCAT(dper.primer_nombre, ' ', dper.segundo_nombre, ' ', dper.primer_apellido, ' ', dper.segundo_apellido)
+         FROM personas dper
+         JOIN docentes doc ON dper.id = doc.id_persona
+         WHERE doc.id = asic.id_docente) AS nombre_completo_docente,
+        -- nombre_usuario y cedula del docente
+        (SELECT du.nombre_usuario FROM usuarios du WHERE du.id_persona = doc.id_persona) AS nombre_usuario_docente,
+        (SELECT dper.numero_identificacion FROM personas dper WHERE dper.id = doc.id_persona) AS cedula_docente
+      FROM
+        personas p
+      INNER JOIN
+        usuarios u ON u.id_persona = p.id
+      LEFT JOIN
+        sgme.usuarios_perfiles up ON up.id_usuario = u.id
+      LEFT JOIN
+        sgme.perfiles per ON up.id_perfil = per.id  
+      LEFT JOIN
+        sgme.reserva_aulas resa ON u.id = resa.id_usuario
+      LEFT JOIN
+        sgme.articulos arti ON arti.id = resa.id_articulo
+      LEFT JOIN
+        asignaturas asig ON asig.id = resa.id_asignacion_academica
+      LEFT JOIN
+        docentes doc ON doc.id = resa.id_docente
+      LEFT JOIN  
+        asignacion_academica asic ON doc.id = asic.id_docente
+      WHERE
+        resa.id IS NOT NULL
+
+      UNION
+
+      SELECT
+        u.id AS id_usuario,
+        per.nombre AS perfil,
+        per.id AS id_perfil,
+        u.nombre_usuario,
+        p.primer_nombre,
+        p.segundo_nombre,
+        p.primer_apellido,
+        p.segundo_apellido,
+        resa.id AS id_reserva,
+        arti.nombre AS nombre_articulo,
+        asic.id_docente,
+        asig.nombre AS nombre_asignatura,
+        resa.fecha_reserva,
+        resa.fecha_fin_reserva,
+        resa.estado,
+        resa.novedad,
+        p.cedula AS cedula,
+        -- Información completa del docente
+        (SELECT CONCAT(dper.primer_nombre, ' ', dper.segundo_nombre, ' ', dper.primer_apellido, ' ', dper.segundo_apellido)
+         FROM personas dper
+         JOIN docentes doc ON dper.id = doc.id_persona
+         WHERE doc.id = asic.id_docente) AS nombre_completo_docente,
+        -- nombre_usuario y cedula del docente
+        (SELECT du.nombre_usuario FROM usuarios du WHERE du.id_persona = doc.id_persona) AS nombre_usuario_docente,
+        (SELECT dper.numero_identificacion FROM personas dper WHERE dper.id = doc.id_persona) AS cedula_docente
+      FROM
+        sgme.personas p
+      INNER JOIN
+        sgme.usuarios u ON u.id_persona = p.id
+      LEFT JOIN
+        sgme.usuarios_perfiles up ON up.id_usuario = u.id
+      LEFT JOIN
+        sgme.perfiles per ON up.id_perfil = per.id  
+      LEFT JOIN
+        sgme.reserva_aulas resa ON u.id = resa.id_usuario
+      LEFT JOIN
+        sgme.articulos arti ON arti.id = resa.id_articulo
+      LEFT JOIN
+        asignaturas asig ON asig.id = resa.id_asignacion_academica
+      LEFT JOIN
+        docentes doc ON doc.id = resa.id_docente
+      LEFT JOIN  
+        asignacion_academica asic ON doc.id = asic.id_docente
+      WHERE
+        resa.id IS NOT NULL;
+    `);
+
+    console.log('Consulta ejecutada con éxito:', response.rows);
+    return response.rows;
+  } catch (error) {
+    console.error('Error al ejecutar la consulta:', error);
+    throw error;
+  }
+};
 
 module.exports = {
   getProgramas,
   getDocentes,
   getAsignaturas,
   reservasolicitud,
-  nomusu
+  nomusu,
+  ceduladoc,
+  aulasbu,
+  reservasporfecha,
+  reservacalendario
 };

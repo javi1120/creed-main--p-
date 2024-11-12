@@ -39,6 +39,7 @@ export class ProgramaService {
     return this.httpclient.post(this.url + 'reservasaulas', {
         "id_usuario": datossol.id_usuario, // ID del usuario que realiza la reserva
         "id_articulo": datossol.id_articulo, // ID del artículo
+        "id_docente": datossol.id_docente, // ID del docente
         "id_asignacion_academica": datossol.id_asignacion_academica, // ID de la asignación académica
         "fecha_reserva": datossol.fecha_reserva, // Fecha de la reserva
      //   "hora_inicio": datossol.hora_inicio, // Hora de inicio de la reserva
@@ -51,6 +52,24 @@ export class ProgramaService {
     let headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this.httpclient.post(this.url + 'nomusu', { id_usuario }, { headers });
   }
-  
+
+getCeduladoc(cedula: string): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.httpclient.post(this.url + 'ceduladoc', { cedula }, { headers });
+  }
+
+  getAulasbu(nombre_articulo: string): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.httpclient.post(this.url + 'aulasbu', { nombre_articulo }, { headers });
+  }
+
+  getReservasPorFecha(fecha: Date): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.httpclient.post(this.url + 'reservasporfecha', { fecha }, { headers });
+  }
   //
+  getReservasCalendario(): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.httpclient.get(this.url + 'reservacalendario', { headers });
+  }
 }

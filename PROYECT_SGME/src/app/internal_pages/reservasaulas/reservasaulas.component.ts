@@ -1,7 +1,8 @@
 import { CommonModule, JsonPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatCardModule } from '@angular/material/card';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -16,7 +17,8 @@ import { ProgramaService } from '../../services/aulas.service';
 import { Programa } from '../../modelos/programas';
 import { Docente } from '../../modelos/docentes';
 import { Asignatura } from '../../modelos/asignaturas';
-
+import { MenuFlotanteComponent } from '../menu-flotante/menu-flotante.component';
+import { GestionUsuariosComponent } from '../gestion-usuarios/gestion-usuarios.component'; 
 interface ArticuloSolicitud {
   id: any;
   nombre: any;
@@ -77,7 +79,17 @@ export class ReservasaulasComponent {
   formRese: FormGroup;
   idarti:any;
   id_prueba:any;
-
+  cedula:any;
+  nombre_articulo: any;
+    fecha: Date = new Date();
+  datosCedula: any[] = [];
+  datosFecha: any[] = [];
+  nombreArticulo: any;
+  datosAulas: any[] = [];
+  @ViewChild('modal') modal: TemplateRef<any> | null = null; // Inicializar con null
+  @ViewChild('cedulaModal') cedulaModal: TemplateRef<any> | null = null; 
+  @ViewChild('aulasModal') aulasModal: TemplateRef<any> | null = null;
+  @ViewChild('fechaModal') fechaModal: TemplateRef<any> | null = null;
   // Definición del arreglo de horas
   horas: string[] = [
     "7:00 AM", "7:50 AM", "8:40 AM", "9:30 AM", "10:20 AM", 
@@ -86,7 +98,7 @@ export class ReservasaulasComponent {
     "7:55 PM", "8:15 PM", "9:05 PM", "9:55 PM"
   ];
 
-  constructor(private fb: FormBuilder, private inventarioService: InventarioService, private sesionservice: SesionService, private programaService: ProgramaService) {
+  constructor(private fb: FormBuilder, private inventarioService: InventarioService, private sesionservice: SesionService, private programaService: ProgramaService, private modalService: NgbModal) {
     this.model = { year: this.today.getFullYear(), month: this.today.getMonth() + 1, day: this.today.getDate() };
     this.formRese = this.fb.group({
       selectedPrograma: ['', Validators.required],
@@ -141,6 +153,12 @@ export class ReservasaulasComponent {
 
       }
     )
+  }
+
+  openModal() {
+    if (this.modal) {
+      this.modalService.open(this.modal, { size: 'lg', backdrop: 'static' });
+    }
   }
 
   closeModal() {
@@ -225,24 +243,6 @@ export class ReservasaulasComponent {
     }
   }
 
-  /* async listarAsignaturas() {
-    console.log('id_ docente',this.id_docente);
-    const idDocenteGuardado = this.id_docente;
-    if (this.id_docente) {
-      await this.programaService.getAsignaturas(this.id_docente).subscribe(
-        res => {
-          this.asignaturas = <Asignatura[]><any>res; 
-          this.id_docente = this.docentes[idDocenteGuardado].Id;
-          console.log('id_docente',this.id_docente);
-        }, error => {
-          console.error('Error al obtener las asignaturas', error);
-          
-        }
-      );
-    } else {
-      console.error('id_docente es undefined');
-    }
-  } */
 
     async listarAsignaturas() {
       const id_docente = this.formRese.get('id_docente')?.value;
@@ -292,6 +292,7 @@ export class ReservasaulasComponent {
     if (this.formRese.valid) {
       const reservaData = {
         id_articulo: this.formRese.get('id_articulo')?.value,
+        id_docente: this.formRese.get('id_docente')?.value,
         id_asignacion_academica: this.formRese.get('id_asignaturas_plan_estudio')?.value,
         fecha_reserva: this.formRese.get('fecha_reserva')?.value,
       //  hora_inicio: this.formRese.get('hora_inicio')?.value,
@@ -332,4 +333,152 @@ export class ReservasaulasComponent {
       });
     }
   }
+
+
+//Apartado 2
+
+  async onChangecedulaUsuario(event: any) {
+    this.cedula = event.target.value;
+    console.log('Cédula ingresada:', this.cedula);
+
+    if (this.cedula) {
+      await this.programaService.getCeduladoc(this.cedula).subscribe(
+        res => {
+          this.datosCedula = res;
+          console.log('Datos obtenidos por cédula:', this.datosCedula);
+
+          if (this.datosCedula.length > 0) {
+            this.openCedulaModal(); // Abrir el modal si se encuentran datos
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'No hay reservas creadas con esa cédula'
+            });
+          }
+        }, error => {
+          console.error('Error al obtener los datos por cédula:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ocurrió un error al buscar las reservas'
+          });
+        }
+      );
+    } else {
+      console.error('Cédula es undefined');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Por favor, ingrese una cédula válida'
+      });
+    }
+  }
+
+  openCedulaModal() {
+    if (this.cedulaModal) {
+      this.modalService.open(this.cedulaModal, { size: 'lg', backdrop: 'static' });
+    }
+  }
+
+  closeCedulaModal() {
+    this.modalService.dismissAll();
+  }
+
+  async onChangeNombreArticulo(event: any) {
+    this.nombre_articulo = event.target.value;
+    console.log('Nombre del artículo ingresado:', this.nombre_articulo);
+
+    if (this.nombre_articulo) {
+      await this.programaService.getAulasbu(this.nombre_articulo).subscribe(
+        res => {
+          this.datosAulas = res;
+          console.log('Datos obtenidos por nombre del artículo:', this.datosAulas);
+
+          if (this.datosAulas.length > 0) {
+            this.openAulasModal(); // Abrir el modal si se encuentran datos
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'No hay reservas creadas con ese nombre de artículo'
+            });
+          }
+        }, error => {
+          console.error('Error al obtener los datos por nombre del artículo:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ocurrió un error al buscar las reservas'
+          });
+        }
+      );
+    } else {
+      console.error('Nombre del artículo es undefined');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Por favor, ingrese un nombre de artículo válido'
+      });
+    }
+  }
+
+  openAulasModal() {
+    if (this.aulasModal) {
+      this.modalService.open(this.aulasModal, { size: 'lg', backdrop: 'static' });
+    }
+  }
+
+  closeAulasModal() {
+    this.modalService.dismissAll();
+  }
+
+  async onChangeFecha(event: any) {
+    this.fecha = event.target.value;
+    console.log('Fecha ingresada:', this.fecha);
+  
+    if (this.fecha) {
+      await this.programaService.getReservasPorFecha(this.fecha).subscribe(
+        res => {
+          this.datosFecha = res;
+          console.log('Datos obtenidos por fecha:', this.datosFecha);
+  
+          if (this.datosFecha.length > 0) {
+            this.openFechaModal(); // Abrir el modal si se encuentran datos
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'No hay reservas creadas para esa fecha'
+            });
+          }
+        }, error => {
+          console.error('Error al obtener los datos por fecha:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ocurrió un error al buscar las reservas'
+          });
+        }
+      );
+    } else {
+      console.error('Fecha es undefined');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Por favor, ingrese una fecha válida'
+      });
+    }
+  }
+
+  openFechaModal() {
+    if (this.fechaModal) {
+      this.modalService.open(this.fechaModal, { size: 'lg', backdrop: 'static' });
+    }
+  }
+  
+  closeFechaModal() {
+    this.modalService.dismissAll();
+  }
+  ///
 }

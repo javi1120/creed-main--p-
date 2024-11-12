@@ -1,173 +1,277 @@
 @font-face {
-    font-family: "Robotolight";
-    src: url('../../../assets/tipografia/RobotoCondensed-Regular.ttf');
+  font-family: "Robotolight";
+  src: url('../../../assets/tipografia/RobotoCondensed-Regular.ttf');
 }
 
 @font-face {
-    font-family: "Roboto";
-    src: url('../../../assets/tipografia/RobotoCondensed-SemiBold.ttf');
+  font-family: "Roboto";
+  src: url('../../../assets/tipografia/RobotoCondensed-SemiBold.ttf');
 }
 
-.formulario{
-    background-color: rgb(248, 248, 248);
-    padding-right: 60px;
-    padding-left: 20px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    margin: 40px;
+body {
+  font-family: 'Robotolight', sans-serif;
 }
 
-form input{
-    margin-top: 5px;
-} 
-
-label{
-    color: rgb(82, 82, 82);
-}
-
-form h3{
+h1 {
   text-align: center;
-    font-family: 'Roboto';
-    color:  #BE1622;
+  font-family: 'Roboto';
+  color: #BE1622;
 }
 
-select{
-    margin-top: 4px;
+.formulario {
+  background-color: rgb(248, 248, 248);
+  padding: 20px 60px;
+  margin: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+form input {
+  margin-top: 5px;
+}
+
+label {
+  color: rgb(82, 82, 82);
+}
+
+form h3 {
+  text-align: center;
+  font-family: 'Roboto';
+  color: #BE1622;
+}
+
+select {
+  margin-top: 4px;
+}
+
 .select-wide {
   width: 120%; /* Ajusta el ancho al 100% del contenedor */
 }
-.botonessub button{
-    width: 40px;
-    margin-top: 30px;
-    margin-right: 5px;
-}
 
-.botonessubsol button{
+.botonessub button,
+.botonessubsol button {
   width: 40px;
   margin-top: 5px;
   margin-right: 5px;
 }
 
-.boton{
-    text-align: center;
+.boton {
+  text-align: center;
 }
 
 .boton button {
-    width: 150px;
-    background-color:  #BE1622;
-    color: white;
+  width: 150px;
+  background-color: #BE1622;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.selector{
-    margin: 20px;
+.boton button:hover {
+  background-color: #a3141c;
 }
 
-h1{
-    text-align: center;
-    font-family: 'Roboto';
-    color:  #BE1622;
+.selector {
+  margin: 20px;
 }
 
-.requerido{
-    color: red;
-    font-size: 12px;
-    margin-top: -15px;
-    margin-left: 30px;
+.requerido {
+  color: red;
+  font-size: 12px;
+  margin-top: -15px;
+  margin-left: 30px;
 }
 
 /* ventana modal */
 .modal-background {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    overflow: auto;
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: auto;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 3px 3px 4px rgba(80, 0, 0, 0.5);
+  width: 50%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* fin modal */
+
+.demo-inline-calendar-card {
+  display: inline-block;
+  transform: scale(0.9); /* Ajusta el valor para reducir el tamaño del calendario */
+  transform-origin: top left;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+  margin-top: 50px;
+  padding: 10px;
+}
+
+.mat-calendar {
+  width: 100% !important;
+}
+
+.datecontent label {
+  margin-right: 50px;
+}
+
+.btnagregarsolicitud {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.times {
+  transform: scale(0.8);
+}
+
+.modelim > img {
+  width: 25px;
+  height: 25px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+button.btn.btn-primary.mt-3 {
+  background-color: #BE1622; /* Cambia el color de fondo */
+  border: none; /* Elimina el borde */
+  border-radius: 5px; /* Redondea los bordes */
+  color: white; /* Color del texto */
+  padding: 10px 20px; /* Añade padding */
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+  display: block;
+  margin: 0 auto;
+}
+
+button.btn.btn-primary.mt-3:hover {
+  background-color: #50bdfc; /* Color de fondo al hacer hover */
+  display: block;
+  margin: 0 auto;
+}
+
+input.pp1, input.pp2 { /* Campo aulas y cedula */
+  display: inline-block;
+  width: 48%; /* Ajusta el ancho de cada input para que estén balanceados */
+  margin-right: 4%; /* Espacio entre los inputs */
+}
+
+/* Asegura que el último input no tenga margen derecho */
+input.pp2 {
+  margin-right: 0;
+}
+
+/* Centrar el campo de fecha */
+.fecha, input.pp4 {
+  display: block;
+  text-align: center; /* Centra el texto dentro del campo */
+  margin: 0 auto; /* Centra el campo horizontalmente */
+}
+
+/* Hacer el campo más pequeño */
+input.pp4 {
+  width: 50%; /* Ajusta el ancho del campo de fecha */
+}
+
+@media screen and (max-width: 768px) {
+  .modalgestion-content {
+    width: 70%;
+    margin: 15%;
   }
-  
+
   .modal-content {
-    background-color: #fefefe;
-    margin: 5% auto;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 3px 3px 4px rgba(80, 0, 0, 0.5);
-    width: 50%;
-  }
-  
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  /* fin modal */
-  
-  .demo-inline-calendar-card {
-    display: inline-block;
-    transform: scale(0.9); /* Ajusta el valor para reducir el tamaño del calendario */
-    transform-origin: top left;
-    border-radius: 10px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-    margin-top: 50px;
-    padding: 10px;
-  }
-  
-  .mat-calendar {
-    width: 100% !important;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 15%;
   }
 
-  .datecontent label{
-    margin-right: 50px;
-  }
-
-  .btnagregarsolicitud{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .datecontent {
     margin-top: 20px;
   }
 
-  .times{
-    transform: scale(0.8);
+  .demo-inline-calendar-card {
+    margin-top: 10px;
   }
 
-  .modelim > img{
-    width: 25px;
-    height: 25px;
-    margin-left: 10px;
-    margin-bottom: 10px;
-    cursor: pointer;
+  .cedula-modal .modal-content {
+    width: 100%; /* Hace que el modal ocupe todo el ancho de la pantalla */
+    height: 100%; /* Hace que el modal ocupe toda la altura de la pantalla */
+    margin: 0; /* Elimina márgenes innecesarios */
+    padding: 20px; /* Añade espacio dentro del modal */
+    overflow: auto; /* Permite desplazamiento si el contenido es demasiado grande */
+    display: flex;
+    flex-direction: column; /* Asegura que el contenido se distribuya en columnas */
+    position: relative; /* Necesario para posicionar el botón de cierre */
   }
 
-  @media screen and (max-width: 768px) {
-    .modalgestion-content{
-      width: 70%;
-      margin: 15%;
-    }
-    .modal-content {
-      width: 90%;
-      margin-left: 5%;
-      margin-right: 5%;
-      margin-top: 15%;
-    }
-
-    .datecontent{
-      margin-top: 20px;
-    }
-
-    .demo-inline-calendar-card {
-      margin-top: 10px;
-    }
-
+  .cedula-modal .modal-body {
+    flex: 1; /* Hace que el cuerpo del modal ocupe el espacio disponible */
+    overflow-y: auto; /* Permite el desplazamiento vertical en el cuerpo */
+    padding: 20px; /* Añade un poco de padding dentro del cuerpo del modal */
   }
+
+  .cedula-modal .modal-header,
+  .cedula-modal .modal-footer {
+    flex-shrink: 0; /* Evita que el encabezado y pie de página se encojan */
+  }
+
+  .cedula-modal .modal-header {
+    display: flex;
+    justify-content: space-between; /* Asegura que el título y el botón de cierre estén separados */
+    align-items: center; /* Centra el título y el botón verticalmente */
+    padding: 10px 20px; /* Añade un poco de padding en el encabezado */
+    border-bottom: 1px solid #ddd; /* Añade una línea sutil debajo del encabezado */
+    position: relative; /* Asegura que el botón se alinee correctamente */
+  }
+
+  .cedula-modal .modal-title {
+    font-size: 1.25rem; /* Tamaño del texto */
+    font-weight: 600; /* Estilo de fuente */
+    color: #333; /* Color del texto */
+    margin: 0; /* Elimina margen alrededor del título */
+  }
+
+  .cedula-modal .btn-close {
+    background: none; /* Elimina el fondo del botón */
+    border: none; /* Elimina el borde del botón */
+    color: #333; /* Color del ícono */
+    font-size: 1.5rem; /* Tamaño del ícono */
+    cursor: pointer; /* Cambia el cursor cuando pasa sobre el botón */
+    position: absolute; /* Posiciona el botón de cierre en la esquina superior derecha */
+    top: 0;
+    right: 0;
+  }
+
+  .cedula-modal .btn-close:hover {
+    color: #007bff; /* Cambia el color cuando el mouse pasa sobre el botón */
+  }
+}

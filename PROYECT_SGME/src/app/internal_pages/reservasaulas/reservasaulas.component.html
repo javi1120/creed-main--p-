@@ -1,77 +1,231 @@
 <div class="container pt-5">
+  <!-- Título fuera del modal -->
   <h1>Reserva de aulas</h1>
-  <div class="formulario">
-    <h4>Reserva de aulas - 2</h4>
+  <hr>
+  <!-- Botón para abrir el modal -->
+  <h5>Filtros:</h5>
+  <div class="buscador">
+    <input type="text" class="form-control pp1" placeholder="Cedula" [(ngModel)]="cedula" (change)="onChangecedulaUsuario($event)">
+    <!-- Modal para mostrar los datos obtenidos por cédula -->
+    <ng-template #cedulaModal let-modal>
+      <div class="modal fade show d-block cedula-modal" tabindex="-1" aria-labelledby="cedulaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="cedulaModalLabel">Datos obtenidos por Cédula</h5>
+              <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>ID Reserva</th>
+                    <th>Docente</th>
+                    <th>Correo</th>
+                    <th>Aula</th>
+                    <th>Asignatura</th>
+                    <th>Fecha Reserva</th>
+                    <th>Fecha Fin Reserva</th>
+                    <th>Estado</th>
+                    <th>Novedad</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let dato of datosCedula">
+                    <td>{{ dato.id_reserva }}</td>
+                    <td>{{ dato.nombre_completo_docente }}</td>
+                    <td>{{ dato.nombre_usuario_docente }}</td>
+                    <td>{{ dato.nombre_articulo }}</td>
+                    <td>{{ dato.nombre_asignatura }}</td>
+                    <td>{{ dato.fecha_reserva }}</td>
+                    <td>{{ dato.fecha_fin_reserva }}</td>
+                    <td>{{ dato.estado ? 'Aprobada' : 'Pendiente' }}</td>
+                    <td>{{ dato.novedad }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <input type="text" class="form-control pp2" placeholder="Aula" [(ngModel)]="nombre_articulo" (change)="onChangeNombreArticulo($event)">
+    <!-- Modal para mostrar los datos obtenidos por Nombre del aula -->
+    <ng-template #aulasModal let-modal>
+      <div class="modal fade show d-block aulas-modal" tabindex="-1" aria-labelledby="aulasModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="aulasModalLabel">Datos obtenidos por Aula</h5>
+              <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>ID Reserva</th>
+                    <th>Docente</th>
+                    <th>Correo</th>
+                    <th>Aula</th>
+                    <th>Asignatura</th>
+                    <th>Fecha Reserva</th>
+                    <th>Fecha Fin Reserva</th>
+                    <th>Estado</th>
+                    <th>Novedad</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let dato of datosAulas">
+                    <td>{{ dato.id_reserva }}</td>
+                    <td>{{ dato.nombre_completo_docente }}</td>
+                    <td>{{ dato.nombre_usuario_docente }}</td>
+                    <td>{{ dato.nombre_articulo }}</td>
+                    <td>{{ dato.nombre_asignatura }}</td>
+                    <td>{{ dato.fecha_reserva }}</td>
+                    <td>{{ dato.fecha_fin_reserva }}</td>
+                    <td>{{ dato.estado ? 'Aprobada' : 'Pendiente' }}</td>
+                    <td>{{ dato.novedad }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
     <hr>
-    <form [formGroup]="formRese">
-      <div class="row">
-        <div class="col-sm-4 col-lg-4">
-          <label>Categorías:</label>
-          <select class="form-select"  [(ngModel)]="id_categoria_sub" (change)="listarsubcategorias()" [ngModelOptions]="{standalone: true}">
-            <option *ngFor="let cate of categorias" [value]="cate.id">{{cate.nombre}}</option>
-          </select>
-          <div></div>
-          <label>Programa:</label>
-          <select class="form-select" formControlName="selectedPrograma" (change)="listarDocentes()">
-            <option *ngFor="let programa of programas" [value]="programa.id">{{programa.nombre}}</option>
-          </select>
-          <label>Fecha de reserva -Inicio:</label>
-          <input type="datetime-local" placeholder="Fecha de reserva -Inicio" class="form-control" formControlName="fecha_reserva" (mouseenter)="onMouseEnter(1)" (mouseout)="onMouseOut(1)">
-          <label>Novedad:</label>
-          <textarea class="form-control" placeholder="Novedad" formControlName="novedad"></textarea>
-        </div>
-
-        <div class="col-sm-4 col-lg-4">
-          <label>Subcategorías:</label>
-          <select class="form-select" [(ngModel)]="id_subcate" [ngModelOptions]="{standalone: true}" (change)="listararticulossolicitud()">
-            <option *ngFor="let subcate of subcategorias" [value]="subcate.id">{{subcate.nombre}}</option>
-          </select>
-          <label>Docente:</label>
-          <select class="form-select" formControlName="id_docente" (change)="listarAsignaturas()">
-            <option *ngFor="let docente of docentes" [value]="docente.Id">
-              {{docente.primer_nombre}} {{docente.segundo_nombre}} {{docente.primer_apellido}} {{docente.segundo_apellido}}
-            </option>
-          </select>
-          <label>Fecha de reserva - Fin:</label>
-          <input type="datetime-local" placeholder="Fecha de reserva - Fin" class="form-control" formControlName="fecha_fin_reserva" (mouseenter)="onMouseEnter(1)" (mouseout)="onMouseOut(1)">
-         <!--  <select class="form-select" formControlName="hora_inicio">
-            <option value="7:00 AM">7:00 AM</option>
-            <option value="7:50 AM">7:50 AM</option>
-            <option value="8:40 AM">8:40 AM</option>
-            <option value="9:30 AM">9:30 AM</option>
-            <option value="10:20 AM">10:20 AM</option>
-            <option value="11:10 AM">11:10 AM</option>
-            <option value="12:00 PM">12:00 PM</option>
-            <option value="12:50 PM">12:50 PM</option>
-            <option value="1:50 PM">1:50 PM</option>
-            <option value="2:40 PM">2:40 PM</option>
-            <option value="3:30 PM">3:30 PM</option>
-            <option value="4:20 PM">4:20 PM</option>
-            <option value="5:10 PM">5:10 PM</option>
-            <option value="6:15 PM">6:15 PM</option>
-            <option value="7:05 PM">7:05 PM</option>
-            <option value="7:55 PM">7:55 PM</option>
-            <option value="8:15 PM">8:15 PM</option>
-            <option value="9:05 PM">9:05 PM</option>
-            <option value="9:55 PM">9:55 PM</option>
-          </select> -->
-        </div>
-
-        <div class="col-sm-4 col-lg-4">
-          <label>Aulas:</label>
-          <select class="form-select" formControlName="id_articulo"   (change)="listararticulossolicitud()">
-            <option *ngFor="let articulo of listaarticulos" [value]="articulo.id">{{articulo.nombre}}</option>
-          </select>
-          <label>Asignaturas:</label>
-          <select class="form-select" formControlName="id_asignaturas_plan_estudio">
-            <option *ngFor="let asignatura of asignaturas" [value]="asignatura.id">{{asignatura.nombre}}</option>
-          </select>
+    <span class="fecha">Fecha:</span>
+    <input type="date" class="form-control pp4" placeholder="Fecha" [(ngModel)]="fecha" (change)="onChangeFecha($event)">
+    <!-- Modal para mostrar los datos obtenidos por fecha -->
+    <ng-template #fechaModal let-modal>
+      <div class="modal fade show d-block fecha-modal" tabindex="-1" aria-labelledby="fechaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="fechaModalLabel">Datos obtenidos por Fecha</h5>
+              <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>ID Reserva</th>
+                    <th>Docente</th>
+                    <th>Correo</th>
+                    <th>Aula</th>
+                    <th>Asignatura</th>
+                    <th>Fecha Reserva</th>
+                    <th>Fecha Fin Reserva</th>
+                    <th>Estado</th>
+                    <th>Novedad</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let dato of datosFecha">
+                    <td>{{ dato.id_reserva }}</td>
+                    <td>{{ dato.nombre_completo_docente }}</td>
+                    <td>{{ dato.nombre_usuario_docente }}</td>
+                    <td>{{ dato.nombre_articulo }}</td>
+                    <td>{{ dato.nombre_asignatura }}</td>
+                    <td>{{ dato.fecha_reserva }}</td>
+                    <td>{{ dato.fecha_fin_reserva }}</td>
+                    <td>{{ dato.estado ? 'Aprobada' : 'Pendiente' }}</td>
+                    <td>{{ dato.novedad }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div class="col-12 mt-3 boton">
-        <button (click)="guardarReserva()">Guardar</button>
+    </ng-template>
+    <hr>
+  <button class="btn btn-primary mt-3" (click)="openModal()">Crear reserva</button>
+  <hr>
+  <!-- Modal -->
+  <ng-template #modal let-modal>
+    <div class="modal fade show d-block" tabindex="-1" aria-labelledby="reservaModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="reservaModalLabel">Reservar Aula</h5>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="formRese">
+              <div class="row">
+                <div class="col-sm-4 col-lg-4">
+                  <label>Categorías:</label>
+                  <select class="form-select" [(ngModel)]="id_categoria_sub" (change)="listarsubcategorias()" [ngModelOptions]="{standalone: true}">
+                    <option *ngFor="let cate of categorias" [value]="cate.id">{{cate.nombre}}</option>
+                  </select>
+                  <div></div>
+                  <label>Programa:</label>
+                  <select class="form-select" formControlName="selectedPrograma" (change)="listarDocentes()">
+                    <option *ngFor="let programa of programas" [value]="programa.id">{{programa.nombre}}</option>
+                  </select>
+                  <label>Fecha de reserva -Inicio:</label>
+                  <input type="datetime-local" placeholder="Fecha de reserva -Inicio" class="form-control" formControlName="fecha_reserva" (mouseenter)="onMouseEnter(1)" (mouseout)="onMouseOut(1)">
+                  <label>Novedad:</label>
+                  <textarea class="form-control" placeholder="Novedad" formControlName="novedad"></textarea>
+                </div>
+        
+                <div class="col-sm-4 col-lg-4">
+                  <label>Subcategorías:</label>
+                  <select class="form-select" [(ngModel)]="id_subcate" [ngModelOptions]="{standalone: true}" (change)="listararticulossolicitud()">
+                    <option *ngFor="let subcate of subcategorias" [value]="subcate.id">{{subcate.nombre}}</option>
+                  </select>
+                  <label>Docente:</label>
+                  <select class="form-select" formControlName="id_docente" (change)="listarAsignaturas()">
+                    <option *ngFor="let docente of docentes" [value]="docente.Id">
+                      {{docente.primer_nombre}} {{docente.segundo_nombre}} {{docente.primer_apellido}} {{docente.segundo_apellido}}
+                    </option>
+                  </select>
+                  <label>Fecha de reserva - Fin:</label>
+                  <input type="datetime-local" placeholder="Fecha de reserva - Fin" class="form-control" formControlName="fecha_fin_reserva" (mouseenter)="onMouseEnter(1)" (mouseout)="onMouseOut(1)">
+                 <!--  <select class="form-select" formControlName="hora_inicio">
+                    <option value="7:00 AM">7:00 AM</option>
+                    <option value="7:50 AM">7:50 AM</option>
+                    <option value="8:40 AM">8:40 AM</option>
+                    <option value="9:30 AM">9:30 AM</option>
+                    <option value="10:20 AM">10:20 AM</option>
+                    <option value="11:10 AM">11:10 AM</option>
+                    <option value="12:00 PM">12:00 PM</option>
+                    <option value="12:50 PM">12:50 PM</option>
+                    <option value="1:50 PM">1:50 PM</option>
+                    <option value="2:40 PM">2:40 PM</option>
+                    <option value="3:30 PM">3:30 PM</option>
+                    <option value="4:20 PM">4:20 PM</option>
+                    <option value="5:10 PM">5:10 PM</option>
+                    <option value="6:15 PM">6:15 PM</option>
+                    <option value="7:05 PM">7:05 PM</option>
+                    <option value="7:55 PM">7:55 PM</option>
+                    <option value="8:15 PM">8:15 PM</option>
+                    <option value="9:05 PM">9:05 PM</option>
+                    <option value="9:55 PM">9:55 PM</option>
+                  </select> -->
+                </div>
+        
+                <div class="col-sm-4 col-lg-4">
+                  <label>Aulas:</label>
+                  <select class="form-select" formControlName="id_articulo" (change)="listararticulossolicitud()">
+                    <option *ngFor="let articulo of listaarticulos" [value]="articulo.id">{{articulo.nombre}}</option>
+                  </select>
+                  <label>Asignaturas:</label>
+                  <select class="form-select" formControlName="id_asignaturas_plan_estudio">
+                    <option *ngFor="let asignatura of asignaturas" [value]="asignatura.id">{{asignatura.nombre}}</option>
+                  </select>
+                </div>
+              </div>
+        
+              <div class="col-12 mt-3 boton">
+                <button (click)="guardarReserva()">Guardar</button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-    </form>
-  </div>
+    </div>
+  </ng-template>
 </div>

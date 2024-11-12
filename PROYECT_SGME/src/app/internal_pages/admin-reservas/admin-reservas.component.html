@@ -1,32 +1,40 @@
-<div class="container mt-5">
-    <h1>Administrar Reservas</h1>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Usuario</th>
-          <th>Aula</th>
-          <th>Asignatura</th>
-          <th>Fecha de Reserva</th>
-          <th>Fecha Fin de Reserva</th>
-          <th>Novedad</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let reserva of reservas">
-          <td>{{ reserva.primer_nombre }} {{ reserva.segundo_nombre }} {{ reserva.primer_apellido }} {{ reserva.segundo_apellido }}</td>
-          <td>{{ reserva.id_articulo }}</td>
-          <td>{{ reserva.id_asignacion_academica }}</td>
-          <td>{{ reserva.fecha_reserva }}</td>
-          <td>{{ reserva.fecha_fin_reserva }}</td>
-          <td>{{ reserva.novedad }}</td>
-          <td>{{ reserva.estado ? 'Aprobada' : 'Pendiente' }}</td>
-          <td>
-        <!--     <button class="btn btn-success" (click)="aprobarReserva(reserva.id)">Aprobar</button>
-            <button class="btn btn-danger" (click)="rechazarReserva(reserva.id)">Rechazar</button> -->
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="btn-group">
+          <div class="btn btn-primary" (click)="setView(CalendarView.Month)">Month</div>
+          <div class="btn btn-primary" (click)="setView(CalendarView.Week)">Week</div>
+          <div class="btn btn-primary" (click)="setView(CalendarView.Day)">Day</div>
+        </div>
+        <div class="btn btn-secondary" (click)="closeOpenMonthViewDay()">Close</div>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-md-12">
+        <mwl-calendar-month-view
+          *ngIf="view === CalendarView.Month"
+          [viewDate]="viewDate"
+          [events]="events"
+          [activeDayIsOpen]="activeDayIsOpen"
+          (dayClicked)="dayClicked($event)"
+          (eventTimesChanged)="eventTimesChanged($event)"
+        >
+        </mwl-calendar-month-view>
+        <mwl-calendar-week-view
+          *ngIf="view === CalendarView.Week"
+          [viewDate]="viewDate"
+          [events]="events"
+          (eventTimesChanged)="eventTimesChanged($event)"
+        >
+        </mwl-calendar-week-view>
+        <mwl-calendar-day-view
+          *ngIf="view === CalendarView.Day"
+          [viewDate]="viewDate"
+          [events]="events"
+          (eventTimesChanged)="eventTimesChanged($event)"
+        >
+        </mwl-calendar-day-view>
+      </div>
+    </div>
   </div>
