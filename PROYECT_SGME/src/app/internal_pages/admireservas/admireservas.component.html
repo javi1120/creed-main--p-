@@ -1,0 +1,106 @@
+
+    <div class='demo-app-main'>
+      
+      <full-calendar *ngIf='calendarVisible()' [options]='calendarOptions()'>
+        <ng-template #eventContent let-arg>
+          <b>{{ arg.timeText }}</b>
+          <i>{{ arg.event.title }}</i>
+        </ng-template>
+      </full-calendar>
+    </div>
+
+<!-- Modal -->
+
+    <ng-template #modal let-modal>
+        <div class="modal fade show d-block" tabindex="-1" aria-labelledby="reservaModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="reservaModalLabel">Reservar Aula</h5>
+                <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="formRese">
+                  <div class="row">
+                    <div class="col-sm-4 col-lg-4">
+                      <label>Categorías:</label>
+                      <select class="form-select" [(ngModel)]="id_categoria_sub" (change)="listarsubcategorias()" [ngModelOptions]="{standalone: true}">
+                        <option *ngFor="let cate of categorias" [value]="cate.id">{{cate.nombre}}</option>
+                      </select>
+                      <div></div>
+                      <label>Programa:</label>
+                      <select class="form-select" formControlName="selectedPrograma" (change)="listarDocentes()">
+                        <option *ngFor="let programa of programas" [value]="programa.id">{{programa.nombre}}</option>
+                      </select>
+    
+                    </div>
+            
+                    <div class="col-sm-4 col-lg-4">
+                      <label>Subcategorías:</label>
+                      <select class="form-select" [(ngModel)]="id_subcate" [ngModelOptions]="{standalone: true}" (change)="listararticulossolicitud()">
+                        <option *ngFor="let subcate of subcategorias" [value]="subcate.id">{{subcate.nombre}}</option>
+                      </select>
+                      <label>Docente:</label>
+                      <select class="form-select" formControlName="id_docente" (change)="listarAsignaturas()">
+                        <option *ngFor="let docente of docentes" [value]="docente.Id">
+                          {{docente.primer_nombre}} {{docente.segundo_nombre}} {{docente.primer_apellido}} {{docente.segundo_apellido}}
+                        </option>
+                      </select>
+                    </div>
+            
+                    <div class="col-sm-4 col-lg-4">
+                      <label>Aulas:</label>
+                      <select class="form-select" formControlName="id_articulo" (change)="listararticulossolicitud()">
+                        <option *ngFor="let articulo of listaarticulos" [value]="articulo.id">{{articulo.nombre}}</option>
+                      </select>
+                      <label>Asignaturas:</label>
+                      <select class="form-select" formControlName="id_asignaturas_plan_estudio">
+                        <option *ngFor="let asignatura of asignaturas" [value]="asignatura.asig_aca_id">{{asignatura.nombre}}</option>
+                      </select>
+                    </div>
+                  </div>
+    
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <label>Novedad:</label>
+                      <textarea class="form-control" placeholder="Novedad" formControlName="novedad"></textarea>
+                    </div>
+                  </div>
+            
+                  <div class="col-12 mt-3 boton">
+                    <button (click)="guardarReserva()">Guardar</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+   
+      <ng-template #reseModal let-modal>
+        <div class="modal fade show d-block fecha-modal" tabindex="-1" aria-labelledby="fechaModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="fechaModalLabel">Datos obtenidos por Fecha:</h5>
+                <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+              </div>
+              <div class="modal-body">
+                <div *ngFor="let dato of datosReserva" class="list-group">
+                  <div class="list-group-item"><strong>Docente:</strong> {{ dato.nombre_completo_docente }}</div>
+                  <div class="list-group-item"><strong>Aula:</strong> {{ dato.nombre_articulo }}</div>
+                  <div class="list-group-item"><strong>Asignatura:</strong> {{ dato.nombre_asignatura }}</div>
+                  <div class="list-group-item"><strong>Fecha Reserva:</strong> {{ dato.fecha_reserva | date: 'MM/dd/yyyy, h:mm a' }}</div>
+                  <div class="list-group-item"><strong>Fecha Fin Reserva:</strong> {{ dato.fecha_fin_reserva | date: 'MM/dd/yyyy, h:mm a' }}</div>
+                  <div class="list-group-item"><strong>Estado:</strong> {{ dato.estado ? 'Aprobada' : 'Pendiente' }}</div>
+                  <div class="list-group-item"><strong>Novedad:</strong> {{ dato.novedad }}</div>
+                </div>
+                <div class="col-12 mt-3 boton d-flex justify-content-between" *ngIf="!isReservaAprobada">
+                  <button type="button" class="btn btn-success" (click)="aprobarReserva()">Aprobar</button>
+                  <button type="button" class="btn btn-danger" (click)="rechazarReserva()">Rechazar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
