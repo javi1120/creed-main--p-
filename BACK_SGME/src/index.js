@@ -133,7 +133,14 @@ app.post('/sgme/reservasaulas', aulasController.reservasolicitud);
 app.post('/sgme/ceduladoc', aulasController.ceduladoc);
 app.post('/sgme/aulasbu', aulasController.aulasbu);
 app.post('/sgme/reservasporfecha', aulasController.reservasporfecha);
-app.post('/sgme/reservacalendario', aulasController.reservacalendario);
+app.get('/sgme/reservacalendario', aulasController.reservacalendario); //get recibe datos
+app.post('/sgme/borrareserva', aulasController.borrareserva);
+app.post('/sgme/prueba666', aulasController.prueba666);
+app.get('/sgme/prueba1120', aulasController.prueba1120); 
+app.post('/sgme/borraprueba', aulasController.borraprueba);
+app.post('/sgme/estadoaprobado', aulasController.estadoaprobado);
+app.post('/sgme/estadorechazado', aulasController.estadorechazado); 
+app.post('/sgme/reservasdenovedad', aulasController.reservasdenovedad);
 app.use(session({
   secret: 'my-secret-key', // Clave secreta para la firma de cookies
   resave: false, // No volver a guardar la sesión si no se ha modificado

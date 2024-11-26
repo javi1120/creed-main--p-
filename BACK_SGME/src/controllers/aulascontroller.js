@@ -110,6 +110,87 @@ const reservacalendario = async (req, res) => {
     res.status(500).send('Error en el servidor');
   }
 };
+//
+const borrareserva = async (req, res) => {
+  try {
+    console.log('si llego - borrareserva');
+    const params = req.body;
+    const resultado = await aulasService.borrareserva(params);
+    res.json(resultado);
+  } catch (error) {
+    console.error('Error en borrareserva:', error);
+    res.status(500).send('Error en el servidor');
+  }
+};
+
+const prueba666 = async (req, res) => {
+  try {
+    console.log('si llego - prueba666');
+    const params = req.body;
+    const resultado = await aulasService.prueba666(params);
+    res.json(resultado);
+  } catch (error) {
+    console.error('Error en prueba666:', error);
+    res.status(500).send('Error en el servidor');
+  }
+};
+
+const prueba1120 = async (req, res) => {
+  try {
+    console.log('si llego - prueba1120');
+    const resultado = await aulasService.prueba1120();
+    console.log('Datos de sgme.dbevent enviados al frontend:', resultado);
+    res.json(resultado);
+  } catch (error) {
+    console.error('Error en prueba1120:', error);
+    res.status(500).send('Error en el servidor');
+  }
+};
+
+const borraprueba = async (req, res) => {
+  try {
+    console.log('si llego - borraprueba');
+    const params = req.body;
+    const resultado = await aulasService.borraprueba(params);
+    res.json(resultado);
+  } catch (error) {
+    console.error('Error en borraprueba:', error);
+    res.status(500).send('Error en el servidor');
+  }
+};
+
+const estadoaprobado = async (req, res) => {
+  try {
+    const params = req.body;
+    const resultado = await aulasService.estadoaprobado(params);
+    res.json(resultado);
+  } catch (error) {
+    console.error('Error en estadoaprobado:', error);
+    res.status(500).send('Error en el servidor');
+  }
+};
+
+const estadorechazado = async (req, res) => {
+  try {
+    const params = req.body;
+    const resultado = await aulasService.estadorechazado(params);
+    res.json(resultado);
+  } catch (error) {
+    console.error('Error en estadorechazado:', error);
+    res.status(500).send('Error en el servidor');
+  }
+};
+
+const reservasdenovedad = async (req, res) => {
+  try {
+    const { novedad } = req.body;
+    const resultado = await aulasService.reservasdenovedad(novedad);
+    res.json(resultado);
+  } catch (error) {
+    console.error('Error en reservasdenovedad:', error);
+    res.status(500).send('Error en el servidor');
+  }
+};
 
 module.exports = {
   getProgramas,
@@ -120,5 +201,12 @@ module.exports = {
   ceduladoc,
   aulasbu,
   reservasporfecha,
-  reservacalendario
+  reservacalendario,
+  borrareserva,
+  prueba666,
+  prueba1120,
+ borraprueba,
+ estadoaprobado,
+ estadorechazado,
+ reservasdenovedad
 } 

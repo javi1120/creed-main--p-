@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'; 
 import { Observable } from 'rxjs';
 import { Global } from "../global";
-
+//import { ReservaAulas } from '../modelos/reservaaulas';
 @Injectable({
   providedIn: 'root'
 })
@@ -44,8 +44,9 @@ export class ProgramaService {
         "fecha_reserva": datossol.fecha_reserva, // Fecha de la reserva
      //   "hora_inicio": datossol.hora_inicio, // Hora de inicio de la reserva
         "fecha_fin_reserva": datossol.fecha_fin_reserva, // Hora de fin de la reserva
-        "estado": true, // Estado de la reserva, puedes cambiarlo según la lógica que necesites
+        "estado": false, // Estado de la reserva, puedes cambiarlo según la lógica que necesites
         "novedad":datossol.novedad,
+        "visible": true,
       }, { headers });
   }
   getNomusu(id_usuario: number): Observable<any> {
@@ -70,6 +71,37 @@ getCeduladoc(cedula: string): Observable<any> {
   //
   getReservasCalendario(): Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.httpclient.get(this.url + 'reservacalendario', { headers });
+    return this.httpclient.get(this.url + 'reservacalendario',  { headers });
   }
+  //
+  prueba666(eventData: { title: string, start_date: Date, end_date: Date }): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.httpclient.post(this.url + 'prueba666', eventData, { headers });
+  }
+  prueba1120(): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.httpclient.get(this.url + 'prueba1120',  { headers });
+  }
+  borraprueba(title: string): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.httpclient.post(this.url + 'borraprueba', { title }, { headers });
+  }
+  aprobarReserva(novedad: string): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.httpclient.post(this.url + 'estadoaprobado', { novedad }, { headers });
+  }
+rechazarReserva(novedad: string): Observable<any> {
+  let headers = new HttpHeaders().set('Content-Type', 'application/json');
+  return this.httpclient.post(this.url + 'estadorechazado', { novedad }, { headers });
+}
+Borralalareserva(novedad: string): Observable<any> {
+  let headers = new HttpHeaders().set('Content-Type', 'application/json');
+  return this.httpclient.post(this.url + 'borrareserva', { novedad }, { headers });
+}
+
+reservasdenovedad(novedad: string): Observable<any> {
+  let headers = new HttpHeaders().set('Content-Type', 'application/json');
+  return this.httpclient.post(this.url + 'reservasdenovedad', { novedad }, { headers });
+}
+
 }

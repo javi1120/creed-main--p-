@@ -4,11 +4,12 @@ export interface ReservaAulas {
     "id_articulo":bigint;
     "id_asignacion_academica":bigint;
     "fecha_reserva":string;
-    "fecha_fin_reserva":boolean;
-    "estado":string;
+    "fecha_fin_reserva":string;
+    "estado":boolean;
     "novedad":string;
     "primer_nombre": string;
     "segundo_nombre": string;
     "primer_apellido": string;
     "segundo_apellido": string;
+    "visible":boolean;
 }

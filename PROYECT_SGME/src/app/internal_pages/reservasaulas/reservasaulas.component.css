@@ -8,8 +8,12 @@
   src: url('../../../assets/tipografia/RobotoCondensed-SemiBold.ttf');
 }
 
-body {
+/* body {
   font-family: 'Robotolight', sans-serif;
+} */
+
+.contenedorpadre{
+  margin-left: 50px;
 }
 
 h1 {
@@ -85,44 +89,6 @@ select {
   margin-left: 30px;
 }
 
-/* ventana modal */
-.modal-background {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  overflow: auto;
-}
-
-.modal-content {
-  background-color: #fefefe;
-  margin: 5% auto;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 3px 3px 4px rgba(80, 0, 0, 0.5);
-  width: 50%;
-}
-
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-/* fin modal */
-
 .demo-inline-calendar-card {
   display: inline-block;
   transform: scale(0.9); /* Ajusta el valor para reducir el tamaño del calendario */
@@ -178,100 +144,244 @@ button.btn.btn-primary.mt-3:hover {
   margin: 0 auto;
 }
 
-input.pp1, input.pp2 { /* Campo aulas y cedula */
+input.pp1, input.pp2, input.pp4 { /* Campo aulas, cedula y fecha */
   display: inline-block;
-  width: 48%; /* Ajusta el ancho de cada input para que estén balanceados */
-  margin-right: 4%; /* Espacio entre los inputs */
+  width: 15%; /* Ajusta el ancho de cada input para que sean más pequeños */
+  margin-right: 1%; /* Espacio entre los inputs */
 }
 
 /* Asegura que el último input no tenga margen derecho */
-input.pp2 {
+input.pp4 {
   margin-right: 0;
 }
 
-/* Centrar el campo de fecha */
-.fecha, input.pp4 {
+.buscador {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px; /* Espacio entre los campos */
+}
+
+.buscador {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px; /* Espacio entre los campos */
+}
+
+.buscador .form-control {
+  flex: 1 1 30%; /* Ajusta el ancho de cada input para que estén balanceados */
+  min-width: 150px; /* Ancho mínimo para cada input */
+}
+
+/* Estilos para el modal */
+.modal-dialog.modal-lg {
+  max-width: 100%; /* Hace el modal más ancho */
+  margin: 1.75rem auto;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.modal-header {
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem;
+}
+
+.modal-header .modal-title {
+  color: #BE1622;
+  font-family: 'Roboto';
+  font-size: 1.5rem;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Estilos para el formulario */
+.modal-body form {
+  margin: 0;
+}
+
+.modal-body .row {
+  margin-bottom: 1rem;
+}
+
+.modal-body label {
   display: block;
-  text-align: center; /* Centra el texto dentro del campo */
-  margin: 0 auto; /* Centra el campo horizontalmente */
+  margin-bottom: 0.5rem;
+  color: #495057;
+  font-weight: 500;
 }
 
-/* Hacer el campo más pequeño */
+.modal-body .form-select,
+.modal-body .form-control {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.modal-body textarea.form-control {
+  min-height: 100px;
+}
+
+/* Estilos para el botón */
+.boton button {
+  width: 150px;
+  background-color: #39b33f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.boton button:hover {
+  background-color: #0d6405;
+}
+
+
+
+/* agregado */
+
+
+h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+ul {
+  margin: 0;
+  padding: 0 0 0 1.5em;
+}
+
+li {
+  margin: 1.5em 0;
+  padding: 0;
+}
+
+b { /* used for event dates/times */
+  margin-right: 3px;
+}
+
+.demo-app {
+  display: flex;
+  min-height: 100%;
+  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+.demo-app-sidebar {
+  width: 300px;
+  line-height: 1.5;
+  background: #eaf9ff;
+  border-right: 1px solid #d3e2e8;
+}
+
+.demo-app-sidebar-section {
+  padding: 2em;
+}
+
+.demo-app-main {
+  flex-grow: 1;
+  padding: 3em;
+}
+
+.fc { /* the calendar root */
+  max-width: 1100px;
+  margin: 0 auto;
+}
+/* Extra */
+/* Styles for the toggle button */
+.toggle-sidebar-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 5px 10px;
+  font-size: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.toggle-sidebar-button:hover {
+  background-color: #0056b3;
+}
+
+input.pp1 {
+  width: 50px; /* Ajusta el ancho según tus necesidades */
+  max-width: 50px; /* Asegura que el ancho máximo sea 150px */
+}
+
+input.pp2 {
+  width: 150px; /* Ajusta el ancho según tus necesidades */
+  max-width: 150px; /* Asegura que el ancho máximo sea 150px */
+}
 input.pp4 {
-  width: 50%; /* Ajusta el ancho del campo de fecha */
+  width: 150px; /* Ajusta el ancho según tus necesidades */
+  max-width: 150px; /* Asegura que el ancho máximo sea 150px */
 }
 
-@media screen and (max-width: 768px) {
-  .modalgestion-content {
-    width: 70%;
-    margin: 15%;
-  }
 
-  .modal-content {
-    width: 90%;
-    margin-left: 5%;
-    margin-right: 5%;
-    margin-top: 15%;
-  }
+.toggle-calendar-button {
+  width: auto; /* Ajusta el ancho automáticamente según el contenido */
+  background-color: #007bff; /* Color de fondo inicial */
+  color: white; /* Color del texto */
+  border: none; /* Elimina el borde */
+  border-radius: 5px; /* Redondea los bordes */
+  padding: 10px; /* Añade padding */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: block;
+  margin: 0 auto;
+}
 
-  .datecontent {
-    margin-top: 20px;
-  }
+.toggle-calendar-button:hover {
+  background-color: #0056b3; /* Color de fondo al hacer hover */
+}
 
-  .demo-inline-calendar-card {
-    margin-top: 10px;
-  }
+.toggle-calendar-button.active {
+  background-color: #28a745; /* Color de fondo cuando el calendario está visible */
+}
 
-  .cedula-modal .modal-content {
-    width: 100%; /* Hace que el modal ocupe todo el ancho de la pantalla */
-    height: 100%; /* Hace que el modal ocupe toda la altura de la pantalla */
-    margin: 0; /* Elimina márgenes innecesarios */
-    padding: 20px; /* Añade espacio dentro del modal */
-    overflow: auto; /* Permite desplazamiento si el contenido es demasiado grande */
-    display: flex;
-    flex-direction: column; /* Asegura que el contenido se distribuya en columnas */
-    position: relative; /* Necesario para posicionar el botón de cierre */
-  }
 
-  .cedula-modal .modal-body {
-    flex: 1; /* Hace que el cuerpo del modal ocupe el espacio disponible */
-    overflow-y: auto; /* Permite el desplazamiento vertical en el cuerpo */
-    padding: 20px; /* Añade un poco de padding dentro del cuerpo del modal */
-  }
 
-  .cedula-modal .modal-header,
-  .cedula-modal .modal-footer {
-    flex-shrink: 0; /* Evita que el encabezado y pie de página se encojan */
-  }
 
-  .cedula-modal .modal-header {
-    display: flex;
-    justify-content: space-between; /* Asegura que el título y el botón de cierre estén separados */
-    align-items: center; /* Centra el título y el botón verticalmente */
-    padding: 10px 20px; /* Añade un poco de padding en el encabezado */
-    border-bottom: 1px solid #ddd; /* Añade una línea sutil debajo del encabezado */
-    position: relative; /* Asegura que el botón se alinee correctamente */
-  }
 
-  .cedula-modal .modal-title {
-    font-size: 1.25rem; /* Tamaño del texto */
-    font-weight: 600; /* Estilo de fuente */
-    color: #333; /* Color del texto */
-    margin: 0; /* Elimina margen alrededor del título */
-  }
 
-  .cedula-modal .btn-close {
-    background: none; /* Elimina el fondo del botón */
-    border: none; /* Elimina el borde del botón */
-    color: #333; /* Color del ícono */
-    font-size: 1.5rem; /* Tamaño del ícono */
-    cursor: pointer; /* Cambia el cursor cuando pasa sobre el botón */
-    position: absolute; /* Posiciona el botón de cierre en la esquina superior derecha */
-    top: 0;
-    right: 0;
-  }
+.btn-success {
+  background: linear-gradient(to bottom, #28a745, #218838); /* Degradado de verde */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
 
-  .cedula-modal .btn-close:hover {
-    color: #007bff; /* Cambia el color cuando el mouse pasa sobre el botón */
-  }
+.btn-success:hover {
+  background: linear-gradient(to bottom, #218838, #1e7e34); /* Degradado de verde más oscuro */
+}
+
+.btn-danger {
+  background: linear-gradient(to bottom, #dc3545, #c82333); /* Degradado de rojo */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-danger:hover {
+  background: linear-gradient(to bottom, #c82333, #bd2130); /* Degradado de rojo más oscuro */
 }

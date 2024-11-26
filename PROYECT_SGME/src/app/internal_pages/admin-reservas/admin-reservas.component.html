@@ -1,40 +1,54 @@
-<div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="btn-group">
-          <div class="btn btn-primary" (click)="setView(CalendarView.Month)">Month</div>
-          <div class="btn btn-primary" (click)="setView(CalendarView.Week)">Week</div>
-          <div class="btn btn-primary" (click)="setView(CalendarView.Day)">Day</div>
-        </div>
-        <div class="btn btn-secondary" (click)="closeOpenMonthViewDay()">Close</div>
-      </div>
+
+<div class='demo-app'>
+  <button class="toggle-sidebar-button" (click)="toggleSidebar()">Instrucciones</button>
+  <div *ngIf="sidebarVisible" class='demo-app-sidebar'>
+  <div class='demo-app-sidebar'>
+    <div class='demo-app-sidebar-section'>
+      <h2>Instrucciones:</h2>
+      <ul>
+        <li>Seleccione las fechas y se le solicitará que cree un nuevo evento</li>
+        <li>Puede Arrastrar y soltar para cambiar la hora y fecha de los eventos</li>
+        <li>Haga clic en un evento para eliminarlo</li>
+      </ul>
     </div>
-    <br />
-    <div class="row">
-      <div class="col-md-12">
-        <mwl-calendar-month-view
-          *ngIf="view === CalendarView.Month"
-          [viewDate]="viewDate"
-          [events]="events"
-          [activeDayIsOpen]="activeDayIsOpen"
-          (dayClicked)="dayClicked($event)"
-          (eventTimesChanged)="eventTimesChanged($event)"
-        >
-        </mwl-calendar-month-view>
-        <mwl-calendar-week-view
-          *ngIf="view === CalendarView.Week"
-          [viewDate]="viewDate"
-          [events]="events"
-          (eventTimesChanged)="eventTimesChanged($event)"
-        >
-        </mwl-calendar-week-view>
-        <mwl-calendar-day-view
-          *ngIf="view === CalendarView.Day"
-          [viewDate]="viewDate"
-          [events]="events"
-          (eventTimesChanged)="eventTimesChanged($event)"
-        >
-        </mwl-calendar-day-view>
-      </div>
+    <div class='demo-app-sidebar-section'>
+      <label>
+        <input
+          type='checkbox'
+          [checked]='calendarVisible()'
+          (change)='handleCalendarToggle()'
+        />
+       Desplegar el calendario
+      </label>
+    </div>
+    <div class='demo-app-sidebar-section'>
+      <label>
+        <input
+          type='checkbox'
+          [checked]='calendarOptions().weekends'
+          (change)='handleWeekendsToggle()'
+        />
+        Desplegar el calendario por semanas (Lunes a Domingo)
+      </label>
+    </div>
+    <div class='demo-app-sidebar-section'>
+      <h2>Eventos creados: ({{currentEvents().length}})</h2>
+      <ul>
+        <li *ngFor='let event of currentEvents()'>
+          <b>{{event.startStr}}</b>
+          <i>{{event.title}}</i>
+        </li>
+      </ul>
     </div>
   </div>
+</div>
+  <div class='demo-app-main'>
+    <full-calendar *ngIf='calendarVisible()' [options]='calendarOptions()'>
+      <ng-template #eventContent let-arg>
+        <b>{{ arg.timeText }}</b>
+        <i>{{ arg.event.title }}</i>
+      </ng-template>
+    </full-calendar>
+  </div>
+
+</div>

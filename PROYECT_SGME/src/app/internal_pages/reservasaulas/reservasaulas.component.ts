@@ -1,5 +1,5 @@
 import { CommonModule, JsonPipe } from '@angular/common';
-import { Component, ViewChild, ElementRef, TemplateRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, TemplateRef, signal, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -19,6 +19,22 @@ import { Docente } from '../../modelos/docentes';
 import { Asignatura } from '../../modelos/asignaturas';
 import { MenuFlotanteComponent } from '../menu-flotante/menu-flotante.component';
 import { GestionUsuariosComponent } from '../gestion-usuarios/gestion-usuarios.component'; 
+import { RouterOutlet } from '@angular/router';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { FullCalendarComponent } from '@fullcalendar/angular';
+import { CalendarOptions, DateSelectArg, EventClickArg, EventApi } from '@fullcalendar/core';
+import interactionPlugin from '@fullcalendar/interaction';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
+import { ReservaAulas } from '../../modelos/reservaaulas';
+import { INITIAL_EVENTS, createEventId, mapDbEventsToCalendar} from './event-utils';
+import { isSameDay, isSameMonth } from 'date-fns';
+import { HttpClientModule } from '@angular/common/http';
+
+
+
+
 interface ArticuloSolicitud {
   id: any;
   nombre: any;
@@ -31,7 +47,7 @@ interface ArticuloSolicitud {
   selector: 'app-reservasaulas',
   standalone: true,
   providers: [provideNativeDateAdapter()],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, MatDatepickerModule, MatCardModule, NgbDatepickerModule, JsonPipe, NgbTimepickerModule, PaginationModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, MatDatepickerModule, MatCardModule, NgbDatepickerModule, JsonPipe, NgbTimepickerModule, PaginationModule,RouterOutlet, FullCalendarModule],
   templateUrl: './reservasaulas.component.html',
   styleUrls: ['./reservasaulas.component.css']
 })
@@ -86,19 +102,70 @@ export class ReservasaulasComponent {
   datosFecha: any[] = [];
   nombreArticulo: any;
   datosAulas: any[] = [];
+  //SE AGREGA
+  sidebarVisible: boolean = false;
+datosReserva: any[] = [];
+novedadSeleccionada: string | null = null;
+isReservaAprobada: boolean = false;
+isReservaRechazada: boolean = false;
+calendarComponent: any;
   @ViewChild('modal') modal: TemplateRef<any> | null = null; // Inicializar con null
+  @ViewChild('modal1') modal1: TemplateRef<any> | null = null;
   @ViewChild('cedulaModal') cedulaModal: TemplateRef<any> | null = null; 
   @ViewChild('aulasModal') aulasModal: TemplateRef<any> | null = null;
   @ViewChild('fechaModal') fechaModal: TemplateRef<any> | null = null;
-  // Definición del arreglo de horas
-  horas: string[] = [
-    "7:00 AM", "7:50 AM", "8:40 AM", "9:30 AM", "10:20 AM", 
-    "11:10 AM", "12:00 PM", "12:50 PM", "1:50 PM", "2:40 PM", 
-    "3:30 PM", "4:20 PM", "5:10 PM", "6:15 PM", "7:05 PM", 
-    "7:55 PM", "8:15 PM", "9:05 PM", "9:55 PM"
-  ];
+  @ViewChild('reseModal') reseModal: TemplateRef<any> | null = null; 
 
-  constructor(private fb: FormBuilder, private inventarioService: InventarioService, private sesionservice: SesionService, private programaService: ProgramaService, private modalService: NgbModal) {
+  toggleSidebar() {
+    this.sidebarVisible = !this.sidebarVisible;
+  }
+  calendarVisible = signal(true);
+  calendarOptions = signal<CalendarOptions>({
+    plugins: [
+      interactionPlugin,
+      dayGridPlugin,
+      timeGridPlugin,
+      listPlugin,
+    ],
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+    },
+    initialView: 'dayGridMonth',
+    events: [],
+    initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
+    locale: 'es',
+    timeZone: 'local',
+    buttonText: { // Personaliza los nombres de los botones
+      today: 'Hoy',
+      month: 'Mes',
+      week: 'Semana',
+      day: 'Día',
+      list: 'Agenda'
+    },
+    weekends: true,
+    editable: true,
+    selectable: true,
+    selectMirror: true,
+    dayMaxEvents: true,
+    select: this.handleDateSelect.bind(this),
+    eventClick: this.handleEventClick.bind(this),
+    eventsSet: this.handleEvents.bind(this),
+    //eventMouseEnter: this.handleEventMouseEnter.bind(this)
+    //Agregado
+    
+    /* you can update a remote database when these fire:
+    eventAdd:
+    eventChange:
+    eventRemove:
+    */
+   
+  });
+  currentEvents = signal<EventApi[]>([]);
+
+  constructor(private fb: FormBuilder, private inventarioService: InventarioService, private sesionservice: SesionService, private programaService: ProgramaService, private modalService: NgbModal, private changeDetector: ChangeDetectorRef) {
+    this.loadEvents();
     this.model = { year: this.today.getFullYear(), month: this.today.getMonth() + 1, day: this.today.getDate() };
     this.formRese = this.fb.group({
       selectedPrograma: ['', Validators.required],
@@ -112,6 +179,112 @@ export class ReservasaulasComponent {
       fecha_fin_reserva: ['', Validators.required]
     });
   }
+
+  loadEvents() {
+    this.programaService.getReservasCalendario().subscribe((reservaAula: ReservaAulas[]) => {
+      console.log('Eventos obtenidos del backend:', reservaAula); // Agregar este log para verificar los datos
+      const filteredEvents = reservaAula.filter(event => event.visible !== false); // Filtrar eventos con visible: false
+     const calendarEvents = mapDbEventsToCalendar(filteredEvents);
+      this.calendarOptions.update((options) => ({
+        ...options,
+        events: calendarEvents
+      }));
+    });
+  }
+
+
+  async handleCalendarToggle() {
+    this.calendarVisible.update((bool) => !bool);
+    const button = document.querySelector('.toggle-calendar-button');
+    if (button) {
+      button.classList.toggle('active', this.calendarVisible());
+    }
+  }
+
+  async handleWeekendsToggle() {
+    this.calendarOptions.update((options) => ({
+      ...options,
+      weekends: !options.weekends,
+    }));
+  }
+//crea evento
+async handleDateSelect(selectInfo: DateSelectArg) {
+  const calendarApi = selectInfo.view.calendar;
+  //filtro hoy
+  const startDate = new Date(selectInfo.startStr);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  //
+  if (startDate <= today) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'No se pueden crear reservas en fechas pasadas'
+    });
+    calendarApi.unselect(); // clear date selection
+    return;
+  }
+  calendarApi.unselect(); // clear date selection
+
+  this.formRese.patchValue({
+    fecha_reserva: selectInfo.startStr,
+    fecha_fin_reserva: selectInfo.endStr
+  });
+
+  // Abrir el modal
+  if (this.modal1) {
+    this.modalService.open(this.modal1, { size: 'lg', backdrop: 'static' });
+  }
+  else {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'El aula ya está reservada en ese horario'
+    });
+  }
+}
+
+async handleEventClick(clickInfo: EventClickArg) {
+  const novedad = clickInfo.event.title;
+  console.log('Novedad ingresada:', novedad);
+
+  if (novedad) {
+    await this.programaService.reservasdenovedad(novedad).subscribe(
+      res => {
+        this.datosReserva = res;
+        this.novedadSeleccionada = novedad; 
+        console.log('Datos obtenidos por novedad:', this.datosReserva);
+
+        if (this.datosReserva.length > 0) {
+          this.isReservaAprobada = this.datosReserva.some(dato => dato.estado);
+          this.isReservaRechazada = this.datosReserva.some(dato => dato.visible);
+          this.openreseModal(); // Abrir el modal si se encuentran datos
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No hay reservas creadas para esa novedad'
+          });
+        }
+      }, error => {
+        console.error('Error al obtener los datos por novedad:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al buscar las reservas'
+        });
+      }
+    );
+  } else {
+    console.error('Novedad es undefined');
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Por favor, ingrese una novedad válida'
+    });
+  }
+}
+
 
   ngOnInit() {
     this.obtenerusuario();  
@@ -148,7 +321,8 @@ export class ReservasaulasComponent {
         this.id_categoria_sub = '';
         this.id_subcate = '';
         this.cont = 0;
-          
+
+        this.modalService.dismissAll();
       },error =>{
 
       }
@@ -164,6 +338,17 @@ export class ReservasaulasComponent {
   closeModal() {
     this.modalVisible = false;
   }
+
+  //modal de aprobar o rechazar reservas
+openreseModal() {
+  if (this.reseModal) {
+    this.modalService.open(this.reseModal, { size: 'lg', backdrop: 'static' });
+  }
+}
+
+closereseModal() {
+  this.modalService.dismissAll();
+}
 
   async obtenerusuario() {
     await this.sesionservice.obtenersesion().subscribe(
@@ -288,52 +473,145 @@ export class ReservasaulasComponent {
     console.log('Mouse left:', param);
   }
 
-  async guardarReserva() {    
-    if (this.formRese.valid) {
-      const reservaData = {
-        id_articulo: this.formRese.get('id_articulo')?.value,
-        id_docente: this.formRese.get('id_docente')?.value,
-        id_asignacion_academica: this.formRese.get('id_asignaturas_plan_estudio')?.value,
-        fecha_reserva: this.formRese.get('fecha_reserva')?.value,
-      //  hora_inicio: this.formRese.get('hora_inicio')?.value,
-      fecha_fin_reserva: this.formRese.get('fecha_fin_reserva')?.value,
-        id_usuario: this.id_usuario.sgmed3, // Asegúrate de que id_usuario sea un entero
-        novedad: this.formRese.get('novedad')?.value
-      };
-  
-      console.log('Datos de reserva a guardar:', reservaData);
-  
-      this.programaService.reservau(reservaData, this.id_usuario.sgmed3).subscribe(
-        res => {
-          console.log('Datos guardados exitosamente:', res);
-          Swal.fire({
-            icon: 'success',
-            title: '¡Éxito!',
-            text: 'Reserva realizada exitosamente'
-          });
-          this.formRese.reset(); // Limpiar el formulario
-        },
-        error => {
-          console.error('Error al guardar la reserva:', error);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'No se pudo realizar la reserva'
-          });
-        }
-      );
-    } else {
-      console.warn('Formulario inválido. Por favor, completa todos los campos requeridos.');
-      console.log('Estado del formulario:', this.formRese);
-      console.log('Errores del formulario:', this.formRese.errors);
+//aprovar o rechazar
+
+async aprobarReserva() {
+  console.log('Datos para aprobar:', this.datosReserva); 
+  this.datosReserva.forEach(dato => {
+    console.log('Estado de la reserva:', dato.estado);
+    console.log('Novedad de la reserva:', dato.novedad);
+
+    this.programaService.aprobarReserva(dato.novedad).subscribe(
+      res => {
+        console.log('Reserva aprobada:', res);
+        Swal.fire({
+          icon: 'success',
+          title: '¡Éxito!',
+          text: 'Reserva aprobada exitosamente'
+        });
+        this.modalService.dismissAll();
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+     //   this.loadEvents(); // Recargar los eventos
+      },
+      error => {
+        console.error('Error al aprobar la reserva:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo aprobar la reserva'
+        });
+      }
+    );
+  });
+}
+
+async rechazarReserva() {
+  console.log('Datos para rechazar:', this.datosReserva); 
+  this.datosReserva.forEach(dato => {
+    console.log('Visible - reserva:', dato.visible);
+    console.log('Novedad de la reserva:', dato.novedad);
+  this.programaService.rechazarReserva(dato.novedad).subscribe(
+    res => {
+      console.log('Reserva rechazada:', res);
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'Reserva rechazada exitosamente'
+      });
+      this.modalService.dismissAll();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+     // this.loadEvents(); // Recargar los eventos
+    },
+    error => {
+      console.error('Error al rechazar la reserva:', error);
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Por favor, completa todos los campos requeridos'
+        text: 'No se pudo rechazar la reserva'
       });
     }
-  }
+  );
+});
+}
 
+ //LOGICA
+async guardarReserva() {    
+  if (this.formRese.valid) {
+    const reservaData = {
+      id_articulo: this.formRese.get('id_articulo')?.value,
+      id_docente: this.formRese.get('id_docente')?.value,
+      id_asignacion_academica: this.formRese.get('id_asignaturas_plan_estudio')?.value,
+      fecha_reserva: this.formRese.get('fecha_reserva')?.value,
+      fecha_fin_reserva: this.formRese.get('fecha_fin_reserva')?.value,
+      id_usuario: this.id_usuario.sgmed3,
+      novedad: this.formRese.get('novedad')?.value
+    };
+
+    console.log('Datos de reserva a guardar:', reservaData);
+
+    this.programaService.reservau(reservaData, this.id_usuario.sgmed3).subscribe(
+      res => {
+        console.log('Datos guardados exitosamente:', res);
+        Swal.fire({
+          icon: 'success',
+          title: '¡Éxito!',
+          text: 'Reserva realizada exitosamente'
+        });
+
+        // Recargar eventos primero
+       // this.loadEvents();
+        
+        // Luego agregar el nuevo evento al calendario
+        setTimeout(() => {
+          const calendarApi = this.calendarComponent?.getApi();
+          if (calendarApi) {
+            calendarApi.addEvent({
+              id: createEventId(),
+              title: reservaData.novedad,
+              start: reservaData.fecha_reserva,
+              end: reservaData.fecha_fin_reserva,
+              allDay: false
+            });
+          }
+          this.formRese.reset();
+          this.modalService.dismissAll();
+          console.log('Recarga evento');
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        }, 100);
+      },
+      error => {
+        console.error('Error al guardar la reserva:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo realizar la reserva'
+        });
+      }
+    );
+  }
+}
+
+
+//verificacion de aula y fecha 
+validateDateRange(startDate: Date, endDate: Date, id_articulo: number): boolean {
+  for (const event of this.currentEvents()) {
+    if (event.extendedProps['id_articulo'] === id_articulo) {
+      const eventStart = new Date(event.startStr);
+      const eventEnd = new Date(event.endStr);
+
+      if ((startDate >= eventStart && startDate < eventEnd) || (endDate > eventStart && endDate <= eventEnd) || (startDate <= eventStart && endDate >= eventEnd)) {
+        return false; // La fecha se solapa con una reserva existente
+      }
+    }
+  }
+  return true; // La fecha no se solapa con ninguna reserva existente
+}
 
 //Apartado 2
 
@@ -349,6 +627,7 @@ export class ReservasaulasComponent {
 
           if (this.datosCedula.length > 0) {
             this.openCedulaModal(); // Abrir el modal si se encuentran datos
+            this.cedula = '';
           } else {
             Swal.fire({
               icon: 'error',
@@ -397,6 +676,7 @@ export class ReservasaulasComponent {
 
           if (this.datosAulas.length > 0) {
             this.openAulasModal(); // Abrir el modal si se encuentran datos
+            this.nombre_articulo = '';
           } else {
             Swal.fire({
               icon: 'error',
@@ -445,11 +725,14 @@ export class ReservasaulasComponent {
   
           if (this.datosFecha.length > 0) {
             this.openFechaModal(); // Abrir el modal si se encuentran datos
+            this.fecha = new Date();
           } else {
+            this.fecha = new Date();
             Swal.fire({
               icon: 'error',
               title: 'Error',
               text: 'No hay reservas creadas para esa fecha'
+              
             });
           }
         }, error => {
@@ -480,5 +763,12 @@ export class ReservasaulasComponent {
   closeFechaModal() {
     this.modalService.dismissAll();
   }
-  ///
+
+
+  
+  //final
+  async handleEvents(events: EventApi[]) {
+    this.currentEvents.set(events);
+    this.changeDetector.detectChanges();
+  }
 }

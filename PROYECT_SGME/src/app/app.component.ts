@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, signal, ChangeDetectorRef } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterOutlet,ActivatedRoute, CanActivate } from '@angular/router';
 import { MenuFlotanteComponent } from './internal_pages/menu-flotante/menu-flotante.component';
 import { ReservacionComponent } from './internal_pages/reservacion/reservacion.component';
@@ -7,6 +7,14 @@ import { CommonModule } from '@angular/common';
 import { DatosServiceService } from './services/datos-service.service';
 import { HomeComponent } from './external_pages/home/home.component';
 import { FullCalendarModule } from '@fullcalendar/angular'; 
+//
+import { CalendarOptions, DateSelectArg, EventClickArg, EventApi } from '@fullcalendar/core';
+//import interactionPlugin from '@fullcalendar/interaction';
+//import dayGridPlugin from '@fullcalendar/daygrid';
+//import timeGridPlugin from '@fullcalendar/timegrid';
+//import listPlugin from '@fullcalendar/list';
+import { INITIAL_EVENTS, createEventId } from './event-utils';
+
 @Component({
   selector: 'app-root',
   standalone: true,

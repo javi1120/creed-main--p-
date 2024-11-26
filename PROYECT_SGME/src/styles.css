@@ -1,1 +1,55 @@
-/* You can add global styles to this file, and also import other style files */
+
+html,
+body,
+body > * { /* the app-root */
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* Cambiar el color de todas las letras dentro del calendario a negro */
+.fc .fc-daygrid-day-number,
+.fc .fc-event-title,
+.fc .fc-daygrid-event-dot,
+.fc .fc-daygrid-day-top,
+.fc .fc-daygrid-day-bottom,
+.fc .fc-daygrid-day-frame,
+.fc .fc-daygrid-day-events,
+.fc .fc-daygrid-day-bg,
+.fc .fc-daygrid-day,
+.fc .fc-daygrid-day.fc-day-today,
+.fc .fc-daygrid-day.fc-day-past,
+.fc .fc-daygrid-day.fc-day-future,
+.fc .fc-daygrid-day.fc-day-other {
+  color: black !important;
+}
+/* Cambiar el color de los días encima del calendario a negro */
+.fc .fc-col-header-cell-cushion {
+  color: black !important;
+}
+/* Colorear los domingos en rojo */
+.fc-day-sun {
+  background-color: #ee7474; /* Cambia este color al que prefieras */
+}
+
+.fc-daygrid-day.fc-day-today {
+  background-color: #ffffcc !important; /* Amarillo claro para días con eventos */
+}
+
+/* Colorear de verde los días de lunes a sábado */
+.fc-day-mon,
+.fc-day-tue,
+.fc-day-wed,
+.fc-day-thu,
+.fc-day-fri,
+.fc-day-sat {
+  background-color: #e6ffe6; /* Verde claro para días de semana */
+}
+/* Cambiar el fondo a amarillo para los días con eventos */
+
+
+
+
+.fc-toolbar-title {
+  text-transform: capitalize; /* Capitaliza el texto del título del calendario - Primera letra*/
+}
