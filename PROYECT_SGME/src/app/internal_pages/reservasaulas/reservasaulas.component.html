@@ -120,7 +120,7 @@
           <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="cedulaModalLabel">Datos obtenidos por Cédula</h5>
+                <h5 class="modal-title" id="cedulaModalLabel">Datos obtenidos por Cédula:</h5>
                 <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
               </div>
               <div class="modal-body">
@@ -128,6 +128,7 @@
                   <thead>
                     <tr>
                       <th>Docente</th>
+                      <th>Cedula</th>
                       <th>Aula</th>
                       <th>Asignatura</th>
                       <th>Fecha Reserva</th>
@@ -139,11 +140,12 @@
                   <tbody>
                     <tr *ngFor="let dato of datosCedula">
                       <td>{{ dato.nombre_completo_docente }}</td>
+                      <td>{{ dato.cedula_docente }}</td>
                       <td>{{ dato.nombre_articulo }}</td>
                       <td>{{ dato.nombre_asignatura }}</td>
                       <td>{{ dato.fecha_reserva | date: 'MM/dd/yyyy, h:mm a' }}</td>
                       <td>{{ dato.fecha_fin_reserva | date: 'MM/dd/yyyy, h:mm a' }}</td>
-                      <td>{{ dato.estado ? 'Aprobada' : 'Pendiente' }}</td>
+                      <td>{{ dato.estado ? (dato.visible ? 'Aprobada' : 'Rechazada') : (dato.visible ? 'Pendiente' : 'Rechazada') }}</td>
                       <td>{{ dato.novedad }}</td>
                     </tr>
                   </tbody>
@@ -160,7 +162,7 @@
           <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="aulasModalLabel">Datos obtenidos por Aula</h5>
+                <h5 class="modal-title" id="aulasModalLabel">Datos obtenidos por Aula:</h5>
                 <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
               </div>
               <div class="modal-body">
@@ -168,6 +170,7 @@
                   <thead>
                     <tr>
                       <th>Docente</th>
+                      <th>Cedula</th>
                       <th>Aula</th>
                       <th>Asignatura</th>
                       <th>Fecha Reserva</th>
@@ -179,11 +182,12 @@
                   <tbody>
                     <tr *ngFor="let dato of datosAulas">
                       <td>{{ dato.nombre_completo_docente }}</td>
+                      <td>{{ dato.cedula_docente }}</td>
                       <td>{{ dato.nombre_articulo }}</td>
                       <td>{{ dato.nombre_asignatura }}</td>
                       <td>{{ dato.fecha_reserva | date: 'MM/dd/yyyy, h:mm a' }}</td>
                       <td>{{ dato.fecha_fin_reserva | date: 'MM/dd/yyyy, h:mm a' }}</td>
-                      <td>{{ dato.estado ? 'Aprobada' : 'Pendiente' }}</td>
+                      <td>{{ dato.estado ? (dato.visible ? 'Aprobada' : 'Rechazada') : (dato.visible ? 'Pendiente' : 'Rechazada') }}</td>
                       <td>{{ dato.novedad }}</td>
                     </tr>
                   </tbody>
@@ -201,7 +205,7 @@
           <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="fechaModalLabel">Datos obtenidos por Fecha</h5>
+                <h5 class="modal-title" id="fechaModalLabel">Datos obtenidos por Fecha:</h5>
                 <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
               </div>
               <div class="modal-body">
@@ -209,6 +213,7 @@
                   <thead>
                     <tr>
                       <th>Docente</th>
+                      <th>Cedula</th>
                       <th>Aula</th>
                       <th>Asignatura</th>
                       <th>Fecha Reserva</th>
@@ -220,11 +225,12 @@
                   <tbody>
                     <tr *ngFor="let dato of datosFecha">
                       <td>{{ dato.nombre_completo_docente }}</td>
+                      <td>{{ dato.cedula_docente }}</td>
                       <td>{{ dato.nombre_articulo }}</td>
                       <td>{{ dato.nombre_asignatura }}</td>
                       <td>{{ dato.fecha_reserva | date: 'MM/dd/yyyy, h:mm a' }}</td>
                       <td>{{ dato.fecha_fin_reserva | date: 'MM/dd/yyyy, h:mm a' }}</td>
-                      <td>{{ dato.estado ? 'Aprobada' : 'Pendiente' }}</td>
+                      <td>{{ dato.estado ? (dato.visible ? 'Aprobada' : 'Rechazada') : (dato.visible ? 'Pendiente' : 'Rechazada') }}</td>
                       <td>{{ dato.novedad }}</td>
                     </tr>
                   </tbody>
@@ -383,12 +389,13 @@
             <div class="modal-dialog modal-lg modal-dialog-centered">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="fechaModalLabel">Datos obtenidos por Fecha:</h5>
+                  <h5 class="modal-title" id="fechaModalLabel">Datos obtenidos por Reserva:</h5>
                   <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
                 </div>
                 <div class="modal-body">
                   <div *ngFor="let dato of datosReserva" class="list-group">
                     <div class="list-group-item"><strong>Docente:</strong> {{ dato.nombre_completo_docente }}</div>
+                    <div class="list-group-item"><strong>Cedula:</strong> {{ dato.cedula_docente }}</div>
                     <div class="list-group-item"><strong>Aula:</strong> {{ dato.nombre_articulo }}</div>
                     <div class="list-group-item"><strong>Asignatura:</strong> {{ dato.nombre_asignatura }}</div>
                     <div class="list-group-item"><strong>Fecha Reserva:</strong> {{ dato.fecha_reserva | date: 'MM/dd/yyyy, h:mm a' }}</div>
@@ -416,8 +423,6 @@
       </button>
 -->
 
-          
-          
           <br><br>
           <div>
             <full-calendar *ngIf='calendarVisible()' [options]='calendarOptions()'>
@@ -428,5 +433,4 @@
             </full-calendar>
           </div>
     </div>
-
 </div>

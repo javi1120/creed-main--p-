@@ -141,7 +141,7 @@ ORDER BY
 
 
 const reservasolicitud = async(params) => {
-  console.log('datos 2', params);
+  console.log('datos ', params);
 
   try {
       const id_articulo = params.id_articulo;
@@ -149,36 +149,41 @@ const reservasolicitud = async(params) => {
       const id_asignacion_academica = params.id_asignacion_academica;
       const id_docente = params.id_docente;
       const fecha_reserva = params.fecha_reserva;
-     // const hora_inicio = params.hora_inicio;
       const fecha_fin_reserva = params.fecha_fin_reserva;
       const novedad = params.novedad;
-//verificar fechas si estan en un rango especifico
-     /*  // Verifica que id_asignacion_academica sea válido
-      const validarAsignacion = await pool.query(
-          `SELECT id FROM asignaturas_plan_estudios WHERE id = $1`, 
-          [id_asignacion_academica]
-      );
-      if (!validarAsignacion.rows || validarAsignacion.rows.length === 0) {
-          throw new Error(`id_asignacion_academica ${id_asignacion_academica} no es válido`);
+
+      // Verificar fechas si están en un rango específico
+      const verificarFechas = await pool.query(`
+        SELECT arti.nombre FROM
+          sgme.reserva_aulas resa
+        INNER JOIN
+          sgme.articulos arti ON arti.id = resa.id_articulo
+        WHERE arti.id = $1
+          AND (
+            ($2::timestamp BETWEEN resa.fecha_reserva AND resa.fecha_fin_reserva)
+            OR
+            ($3::timestamp BETWEEN resa.fecha_reserva AND resa.fecha_fin_reserva)
+            OR
+            (resa.fecha_reserva <= $2::timestamp AND resa.fecha_fin_reserva >= $3::timestamp)
+          )
+        GROUP BY arti.nombre
+      `, [id_articulo, fecha_reserva, fecha_fin_reserva]);
+
+      if (verificarFechas.rowCount > 0) {
+        console.log('Conflicto de fechas: No se puede crear la reserva');
+        return false;
+      }else{
+         // Insertar la solicitud de reserva en la tabla sgme.reserva_aulas
+      const response1 = await pool.query(
+        `INSERT INTO "sgme"."reserva_aulas"("id_usuario", "id_articulo", "id_asignacion_academica", "fecha_reserva", "fecha_fin_reserva", "estado","novedad","id_docente","visible") 
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`, 
+        [id_usuario, id_articulo, id_asignacion_academica, fecha_reserva, fecha_fin_reserva, false, novedad, id_docente, true]);
+        return true;
       }
 
-      const validararticulo = await pool.query(
-        `SELECT nombre FROM sgme.articulos WHERE id = $1`, 
-        [id_articulo]
-      ); 
-      if (!validararticulo.rows || validararticulo.rows.length === 0) {
-          throw new Error(`id_articulo ${id_articulo} no es válido`);
-      } */
-
-      /* Se inserta la solicitud de reserva en la tabla sgme.reserva_aulas */
-      const response1 = await pool.query(
-          `INSERT INTO "sgme"."reserva_aulas"("id_usuario", "id_articulo", "id_asignacion_academica", "fecha_reserva", "fecha_fin_reserva", "estado","novedad","id_docente","visible") 
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`, 
-          [id_usuario, id_articulo, id_asignacion_academica, fecha_reserva, fecha_fin_reserva, false, novedad, id_docente, true]
-      );    
-      
-      console.log('ID reserva generada', response1.rows[0].id);
-      
+     /*  console.log('ID reserva generada', response1.rows[0].id);
+      return response1.rows[0].id;
+    } */
   } catch (error) {
       console.error('Error en reservasolicitud:', error);
       throw error;    
@@ -594,6 +599,7 @@ const reservasdenovedad = async (novedad) => {
   }
 };
 
+ 
 
 module.exports = {
   getProgramas,

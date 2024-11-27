@@ -385,3 +385,8 @@ input.pp4 {
 .btn-danger:hover {
   background: linear-gradient(to bottom, #c82333, #bd2130); /* Degradado de rojo más oscuro */
 }
+
+.col-sm-4.mb-3 input[type="date"] {
+  width: 300px;
+  max-width: 300px;
+}

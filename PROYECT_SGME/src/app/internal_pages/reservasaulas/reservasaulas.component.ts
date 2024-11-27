@@ -221,10 +221,10 @@ async handleDateSelect(selectInfo: DateSelectArg) {
       title: 'Error',
       text: 'No se pueden crear reservas en fechas pasadas'
     });
-    calendarApi.unselect(); // clear date selection
+    calendarApi.unselect(); 
     return;
   }
-  calendarApi.unselect(); // clear date selection
+  calendarApi.unselect(); 
 
   this.formRese.patchValue({
     fecha_reserva: selectInfo.startStr,
@@ -539,7 +539,7 @@ async rechazarReserva() {
 }
 
  //LOGICA
-async guardarReserva() {    
+ async guardarReserva() {    
   if (this.formRese.valid) {
     const reservaData = {
       id_articulo: this.formRese.get('id_articulo')?.value,
@@ -556,15 +556,14 @@ async guardarReserva() {
     this.programaService.reservau(reservaData, this.id_usuario.sgmed3).subscribe(
       res => {
         console.log('Datos guardados exitosamente:', res);
-        Swal.fire({
-          icon: 'success',
-          title: '¡Éxito!',
-          text: 'Reserva realizada exitosamente'
-        });
-
-        // Recargar eventos primero
-       // this.loadEvents();
-        
+      if (res == true){
+      
+          Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: 'Reserva realizada exitosamente'
+          });
+          
         // Luego agregar el nuevo evento al calendario
         setTimeout(() => {
           const calendarApi = this.calendarComponent?.getApi();
@@ -584,6 +583,13 @@ async guardarReserva() {
             window.location.reload();
           }, 2000);
         }, 100);
+        }else{
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo completar la reserva. El aula seleccionada ya ha sido reservada para otro docente para el mismo horario. Por favor, elija otro horario o aula disponible.'});          
+        }  
+
       },
       error => {
         console.error('Error al guardar la reserva:', error);
@@ -594,12 +600,21 @@ async guardarReserva() {
         });
       }
     );
+  } else {
+    console.warn('Formulario inválido. Por favor, completa todos los campos requeridos.');
+    console.log('Estado del formulario:', this.formRese);
+    console.log('Errores del formulario:', this.formRese.errors);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Por favor, completa todos los campos requeridos'
+    });
   }
 }
 
 
-//verificacion de aula y fecha 
-validateDateRange(startDate: Date, endDate: Date, id_articulo: number): boolean {
+
+/* validateDateRange(startDate: Date, endDate: Date, id_articulo: number): boolean {
   for (const event of this.currentEvents()) {
     if (event.extendedProps['id_articulo'] === id_articulo) {
       const eventStart = new Date(event.startStr);
@@ -611,7 +626,7 @@ validateDateRange(startDate: Date, endDate: Date, id_articulo: number): boolean 
     }
   }
   return true; // La fecha no se solapa con ninguna reserva existente
-}
+} */
 
 //Apartado 2
 
