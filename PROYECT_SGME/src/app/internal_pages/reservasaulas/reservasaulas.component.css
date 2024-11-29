@@ -8,10 +8,6 @@
   src: url('../../../assets/tipografia/RobotoCondensed-SemiBold.ttf');
 }
 
-/* body {
-  font-family: 'Robotolight', sans-serif;
-} */
-
 .contenedorpadre{
   margin-left: 50px;
 }
@@ -251,7 +247,6 @@ input.pp4 {
 
 /* agregado */
 
-
 h2 {
   margin: 0;
   font-size: 16px;
@@ -267,7 +262,7 @@ li {
   padding: 0;
 }
 
-b { /* used for event dates/times */
+b { /* para modificar eventos o fechas */
   margin-right: 3px;
 }
 
@@ -294,12 +289,10 @@ b { /* used for event dates/times */
   padding: 3em;
 }
 
-.fc { /* the calendar root */
+.fc { /* para modificar el calendario */
   max-width: 1100px;
   margin: 0 auto;
 }
-/* Extra */
-/* Styles for the toggle button */
 .toggle-sidebar-button {
   position: absolute;
   top: 10px;
@@ -318,16 +311,16 @@ b { /* used for event dates/times */
 }
 
 input.pp1 {
-  width: 50px; /* Ajusta el ancho según tus necesidades */
+  width: 50px; 
   max-width: 50px; /* Asegura que el ancho máximo sea 150px */
 }
 
 input.pp2 {
-  width: 150px; /* Ajusta el ancho según tus necesidades */
+  width: 150px; 
   max-width: 150px; /* Asegura que el ancho máximo sea 150px */
 }
 input.pp4 {
-  width: 150px; /* Ajusta el ancho según tus necesidades */
+  width: 150px;
   max-width: 150px; /* Asegura que el ancho máximo sea 150px */
 }
 

@@ -93,7 +93,6 @@ export class AdmireservasComponent {
   programas: Programa[] = []; 
   formRese: FormGroup;
   idarti:any;
-  id_prueba:any;
   cedula:any;
   nombre_articulo: any;
     fecha: Date = new Date();

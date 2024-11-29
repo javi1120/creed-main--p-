@@ -456,56 +456,7 @@ const borrareserva = async (params) => {
     throw error;
   }
 };
-//prueba
 
-const prueba666 = async (params) => {
-  try {
-    const { title, start_date, end_date } = params;
-
-    const response1 = await pool.query(
-      `INSERT INTO "sgme"."dbevent"("title", "start_date", "end_date") 
-       VALUES ($1, $2, $3) RETURNING id`, 
-      [title, start_date, end_date]
-    );
-
-    console.log('ID evento generado', response1.rows[0].id);
-    return response1.rows[0].id;
-  } catch (error) {
-    console.error('Error en prueba666:', error);
-    throw error;
-  }
-};
-
-
-const prueba1120 = async () => {
-  try {
-    const response = await pool.query(`SELECT * FROM "sgme"."dbevent"`);
-    console.log('Datos obtenidos de sgme.dbevent:', response.rows);
-    return response.rows;
-  } catch (error) {
-    console.error('Error en prueba1120:', error);
-    throw error;
-  }
-};
-
-
-const borraprueba = async (params) => {
-  try {
-    const { title } = params;
-
-    const response = await pool.query(`
-      DELETE FROM "sgme"."dbevent"
-      WHERE "title" = $1
-      RETURNING id
-    `, [title]);
-
-    console.log('Reserva borrada con éxito:', response.rows);
-    return response.rows;
-  } catch (error) {
-    console.error('Error al borrar la reserva:', error);
-    throw error;
-  }
-};
 
 const estadoaprobado = async (params) => {
   try {
@@ -612,9 +563,6 @@ module.exports = {
   reservasporfecha,
   reservacalendario,
   borrareserva,
-  prueba666,
-  prueba1120,
-  borraprueba,
   estadoaprobado,
   estadorechazado,
   reservasdenovedad

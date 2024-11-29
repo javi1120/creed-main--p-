@@ -13,9 +13,7 @@ import { GestionSolicitudesComponent } from './internal_pages/gestion-solicitude
 import { GenerarCodigoElementosComponent } from './internal_pages/generar-codigo-elementos/generar-codigo-elementos.component';
 import { GestionUsuariosComponent } from './internal_pages/gestion-usuarios/gestion-usuarios.component';
 import { InvetarioComponent } from './internal_pages/invetario/invetario.component';
-import { ReportesComponent } from './internal_pages/reportes/reportes.component';
 import { ReservasaulasComponent } from './internal_pages/reservasaulas/reservasaulas.component';
-import { AdminReservasComponent } from './internal_pages/admin-reservas/admin-reservas.component';
 import {AdmireservasComponent} from './internal_pages/admireservas/admireservas.component';
 export const routes: Routes = [
     {path:'', component:HomeComponent},
@@ -30,9 +28,7 @@ export const routes: Routes = [
     {path:'menu_flotante',component:MenuFlotanteComponent, canActivate:[permisosGuard]},
     {path:'menu',component:MenuComponent, canActivate:[permisosGuard]},
     {path: 'reservacion', component:ReservacionComponent, canActivate:[permisosGuard]},
-    {path:'reportes',component:ReportesComponent},
     {path: 'reservasaulas', component: ReservasaulasComponent},
-    {path: 'admin_reservas', component: AdminReservasComponent},
     {path: 'admireservas', component: AdmireservasComponent},
    //{path: 'reservasaulas', component: ReservasaulasComponent, canActivate: [permisosGuard]},
     {path: '**', redirectTo:''}

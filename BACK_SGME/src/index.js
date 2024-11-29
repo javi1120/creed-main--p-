@@ -135,9 +135,6 @@ app.post('/sgme/aulasbu', aulasController.aulasbu);
 app.post('/sgme/reservasporfecha', aulasController.reservasporfecha);
 app.get('/sgme/reservacalendario', aulasController.reservacalendario); //get recibe datos
 app.post('/sgme/borrareserva', aulasController.borrareserva);
-app.post('/sgme/prueba666', aulasController.prueba666);
-app.get('/sgme/prueba1120', aulasController.prueba1120); 
-app.post('/sgme/borraprueba', aulasController.borraprueba);
 app.post('/sgme/estadoaprobado', aulasController.estadoaprobado);
 app.post('/sgme/estadorechazado', aulasController.estadorechazado); 
 app.post('/sgme/reservasdenovedad', aulasController.reservasdenovedad);

@@ -102,14 +102,13 @@ export class ReservasaulasComponent {
   datosFecha: any[] = [];
   nombreArticulo: any;
   datosAulas: any[] = [];
-  //SE AGREGA
   sidebarVisible: boolean = false;
 datosReserva: any[] = [];
 novedadSeleccionada: string | null = null;
 isReservaAprobada: boolean = false;
 isReservaRechazada: boolean = false;
 calendarComponent: any;
-  @ViewChild('modal') modal: TemplateRef<any> | null = null; // Inicializar con null
+  @ViewChild('modal') modal: TemplateRef<any> | null = null;
   @ViewChild('modal1') modal1: TemplateRef<any> | null = null;
   @ViewChild('cedulaModal') cedulaModal: TemplateRef<any> | null = null; 
   @ViewChild('aulasModal') aulasModal: TemplateRef<any> | null = null;
@@ -134,10 +133,10 @@ calendarComponent: any;
     },
     initialView: 'dayGridMonth',
     events: [],
-    initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
+    initialEvents: INITIAL_EVENTS, 
     locale: 'es',
     timeZone: 'local',
-    buttonText: { // Personaliza los nombres de los botones
+    buttonText: { // Personaliza los nombres de los botones (de español a ingles)
       today: 'Hoy',
       month: 'Mes',
       week: 'Semana',
@@ -152,14 +151,6 @@ calendarComponent: any;
     select: this.handleDateSelect.bind(this),
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this),
-    //eventMouseEnter: this.handleEventMouseEnter.bind(this)
-    //Agregado
-    
-    /* you can update a remote database when these fire:
-    eventAdd:
-    eventChange:
-    eventRemove:
-    */
    
   });
   currentEvents = signal<EventApi[]>([]);
@@ -473,7 +464,7 @@ closereseModal() {
     console.log('Mouse left:', param);
   }
 
-//aprovar o rechazar
+//aprobar o rechazar
 
 async aprobarReserva() {
   console.log('Datos para aprobar:', this.datosReserva); 
@@ -524,7 +515,6 @@ async rechazarReserva() {
       setTimeout(() => {
         window.location.reload();
       }, 1000);
-     // this.loadEvents(); // Recargar los eventos
     },
     error => {
       console.error('Error al rechazar la reserva:', error);
@@ -538,7 +528,6 @@ async rechazarReserva() {
 });
 }
 
- //LOGICA
  async guardarReserva() {    
   if (this.formRese.valid) {
     const reservaData = {
@@ -612,21 +601,6 @@ async rechazarReserva() {
   }
 }
 
-
-
-/* validateDateRange(startDate: Date, endDate: Date, id_articulo: number): boolean {
-  for (const event of this.currentEvents()) {
-    if (event.extendedProps['id_articulo'] === id_articulo) {
-      const eventStart = new Date(event.startStr);
-      const eventEnd = new Date(event.endStr);
-
-      if ((startDate >= eventStart && startDate < eventEnd) || (endDate > eventStart && endDate <= eventEnd) || (startDate <= eventStart && endDate >= eventEnd)) {
-        return false; // La fecha se solapa con una reserva existente
-      }
-    }
-  }
-  return true; // La fecha no se solapa con ninguna reserva existente
-} */
 
 //Apartado 2
 
@@ -780,8 +754,7 @@ async rechazarReserva() {
   }
 
 
-  
-  //final
+
   async handleEvents(events: EventApi[]) {
     this.currentEvents.set(events);
     this.changeDetector.detectChanges();
